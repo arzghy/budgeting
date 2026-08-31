@@ -1,0 +1,5 @@
+"use client";
+import ItemsPage from "@/components/ItemsPage";
+export default function Page() {
+  return <ItemsPage category="skincare" title="Skincare" />;
+}

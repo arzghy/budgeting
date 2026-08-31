@@ -1,0 +1,38 @@
+{
+  "name": "whale-budgeting",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@auth/mongodb-adapter": "^3.6.0",
+    "@gsap/react": "^2.1.2",
+    "@react-three/drei": "^9.114.0",
+    "@react-three/fiber": "^8.17.10",
+    "gsap": "^3.15.0",
+    "lenis": "^1.1.13",
+    "lottie-react": "^2.4.0",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.0",
+    "next": "14.2.15",
+    "next-auth": "^4.24.10",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "three": "^0.169.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "@types/three": "^0.169.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.14",
+    "typescript": "^5"
+  }
+}
