@@ -7,6 +7,7 @@ const NeedSchema = new Schema(
     amount: { type: Number, default: 0 },
     division: { type: String, default: "kebutuhan" },
     status: { type: String, enum: ["tersisa", "habis"], default: "tersisa" },
+    url: { type: String, default: "" },
   },
   { timestamps: true }
 );

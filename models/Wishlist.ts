@@ -7,6 +7,7 @@ const WishlistSchema = new Schema(
     target: { type: Number, required: true },
     saved: { type: Number, default: 0 }, // manual input progress
     purchased: { type: Boolean, default: false },
+    url: { type: String, default: "" },
   },
   { timestamps: true }
 );

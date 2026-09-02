@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "app/layout.tsx": {
-    "mtime": 1788188300.9895,
-    "seen": 1788188678.8336525,
-    "ast_hash": "47326f115525be1e67878762eeaf82ec",
+    "mtime": 1788194687.5426335,
+    "seen": 1788194885.776956,
+    "ast_hash": "85cf96f017d46d37cd47a8a3e9735c8d",
     "semantic_hash": ""
   },
   "app/lenis.tsx": {
@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "app/page.tsx": {
-    "mtime": 1788191648.5534415,
-    "seen": 1788191933.5611186,
-    "ast_hash": "154fafc8457daf7e2cdb842d2f5ddedc",
+    "mtime": 1788197253.407964,
+    "seen": 1788197340.320376,
+    "ast_hash": "18b50b41225dec39a43ef7c54e0f03b0",
     "semantic_hash": ""
   },
   "app/providers.tsx": {
@@ -180,9 +180,9 @@
     "semantic_hash": ""
   },
   "components/WhaleScene.tsx": {
-    "mtime": 1788191872.3343332,
-    "seen": 1788191933.5611348,
-    "ast_hash": "bd1ba29b57622f049d3a5470e2011024",
+    "mtime": 1788197278.173942,
+    "seen": 1788197340.3203833,
+    "ast_hash": "396cd4b03ab6d3286d854c5d9b2b9421",
     "semantic_hash": ""
   },
   "lib/mongodb.ts": {
@@ -246,9 +246,9 @@
     "semantic_hash": ""
   },
   "tailwind.config.ts": {
-    "mtime": 1788191734.2087255,
-    "seen": 1788191933.5611665,
-    "ast_hash": "2d1c6a436875b28b411917c17ad437f3",
+    "mtime": 1788194717.0314858,
+    "seen": 1788194885.7769976,
+    "ast_hash": "453b082d2ebcd25af594c9b527a8e096",
     "semantic_hash": ""
   },
   "tsconfig.json": {
@@ -279,6 +279,18 @@
     "mtime": 1788190255.0418594,
     "seen": 1788191933.5611799,
     "ast_hash": "0d2912f1475935eb6178dfb5fccf4c56",
+    "semantic_hash": ""
+  },
+  "todo.md": {
+    "mtime": 1788193238.5968773,
+    "seen": 1788194885.7770114,
+    "ast_hash": "e4cb4d24eae0b8f42b28e8a051d9b16b",
+    "semantic_hash": ""
+  },
+  "landing.png": {
+    "mtime": 1788195382.0646143,
+    "seen": 1788196010.2243943,
+    "ast_hash": "5bd788262ccabd078b2ffbf34d615fe4",
     "semantic_hash": ""
   }
 }

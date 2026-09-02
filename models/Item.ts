@@ -8,6 +8,7 @@ const ItemSchema = new Schema(
     price: { type: Number, default: 0 },
     stock: { type: Number, default: 1 },
     notes: { type: String, default: "" },
+    url: { type: String, default: "" },
   },
   { timestamps: true }
 );

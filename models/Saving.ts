@@ -7,6 +7,7 @@ const SavingSchema = new Schema(
     refId: { type: String, default: null }, // wishlist id kalau type wishlist
     name: { type: String, required: true },
     amount: { type: Number, required: true },
+    url: { type: String, default: "" },
   },
   { timestamps: true }
 );

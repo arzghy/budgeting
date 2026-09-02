@@ -1,11 +1,11 @@
 # Graph Report - budgeting  (2026-08-31)
 
 ## Corpus Check
-- 45 files · ~9,761 words
+- 46 files · ~9,827 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 257 nodes · 380 edges · 21 communities (15 shown, 3 thin omitted)
+- 262 nodes · 385 edges · 22 communities (16 shown, 3 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
 
@@ -17,8 +17,8 @@
 - devDependencies
 - ItemsPage
 - NeedsPage
-- WhaleScene.tsx
-- dashboard/layout.tsx
+- app/page.tsx
+- Navbar.tsx
 - WishlistPage
 - app/layout.tsx
 - ExpensesPage
@@ -28,6 +28,7 @@
 - next.config.mjs
 - next-env.d.ts
 - tailwind.config.ts
+- Integrate <KageLandingPage /> from ThreeUI using its exact source
 
 ## God Nodes (most connected - your core abstractions)
 1. `dbConnect()` - 32 edges
@@ -60,14 +61,14 @@
 - **post-edit graph maintenance workflow** — graphify_update, graphify_out_graph_json, claude_md_graphify [EXTRACTED 0.85]
 - **graphify codebase question workflow** — claude_md_graphify, graphify_query, graphify_out_graph_json, graphify_out_wiki_index [EXTRACTED 0.85]
 
-## Communities (21 total, 3 thin omitted)
+## Communities (22 total, 3 thin omitted)
 
 ### Community 0 - "graphify-out/graph.json"
 Cohesion: 0.39
 Nodes (8): graphify project knowledge graph, graphify explain, graphify-out/graph.json, graphify-out/GRAPH_REPORT.md, graphify-out/wiki/index.md, graphify path, graphify query, graphify update .
 
 ### Community 1 - "dbConnect"
-Cohesion: 0.11
+Cohesion: 0.10
 Nodes (36): handler, auth(), authOptions, DELETE(), PUT(), GET(), POST(), DELETE() (+28 more)
 
 ### Community 2 - "dependencies"
@@ -90,12 +91,12 @@ Nodes (6): Item, ItemsPage(), load(), remove(), reset(), submit()
 Cohesion: 0.29
 Nodes (11): DIVISIONS, formatRp(), Need, NeedsPage(), load(), NeedRow(), remove(), reset() (+3 more)
 
-### Community 7 - "WhaleScene.tsx"
-Cohesion: 0.18
-Nodes (4): features, Icon, steps, WhaleScene
+### Community 7 - "app/page.tsx"
+Cohesion: 0.20
+Nodes (8): cards, chapters, Landing(), lessons, stats, useReveals(), WhaleScene, COLORS
 
-### Community 8 - "dashboard/layout.tsx"
-Cohesion: 0.24
+### Community 8 - "Navbar.tsx"
+Cohesion: 0.28
 Nodes (3): links, Navbar(), Whale()
 
 ### Community 9 - "WishlistPage"
@@ -122,20 +123,24 @@ Nodes (7): formatRp(), SavePage(), load(), remove(), submit(), Saving, Wish
 Cohesion: 0.50
 Nodes (3): Fitur, Requirements - Website Budgeting, Tujuan
 
+### Community 21 - "Integrate <KageLandingPage /> from ThreeUI using its exact source"
+Cohesion: 0.40
+Nodes (4): Current configured usage, Exact implementation source, Implementation requirements, Integrate <KageLandingPage /> from ThreeUI using its exact source
+
 ## Knowledge Gaps
-- **86 isolated node(s):** `handler`, `DIVISIONS`, `Expense`, `Need`, `DIVISIONS` (+81 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 114 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **91 isolated node(s):** `handler`, `DIVISIONS`, `Expense`, `Need`, `DIVISIONS` (+86 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 116 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
 - **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dependencies` connect `dependencies` to `devDependencies`?**
-  _High betweenness centrality (0.037) - this node is a cross-community bridge._
+  _High betweenness centrality (0.035) - this node is a cross-community bridge._
 - **What connects `handler`, `DIVISIONS`, `Expense` to the rest of the system?**
-  _86 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _91 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `dbConnect` be split into smaller, more focused modules?**
-  _Cohesion score 0.1063973063973064 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.10087719298245613 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**

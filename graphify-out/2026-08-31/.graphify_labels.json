@@ -6,8 +6,8 @@
   "4": "devDependencies",
   "5": "ItemsPage",
   "6": "NeedsPage",
-  "7": "WhaleScene.tsx",
-  "8": "dashboard/layout.tsx",
+  "7": "app/page.tsx",
+  "8": "Navbar.tsx",
   "9": "WishlistPage",
   "10": "app/layout.tsx",
   "11": "ExpensesPage",
@@ -19,5 +19,6 @@
   "17": "tailwind.config.ts",
   "18": "gsap",
   "19": "next",
-  "20": "postcss.config.js"
+  "20": "postcss.config.js",
+  "21": "Integrate <KageLandingPage /> from ThreeUI using its exact source"
 }

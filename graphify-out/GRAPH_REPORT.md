@@ -1,13 +1,18 @@
-# Graph Report - budgeting  (2026-08-31)
+# Graph Report - budgeting  (2026-09-01)
 
 ## Corpus Check
-- 46 files · ~9,827 words
+- 47 files · ~28,334 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 262 nodes · 385 edges · 22 communities (16 shown, 3 thin omitted)
+- 261 nodes · 382 edges · 23 communities (16 shown, 4 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.86)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `e1dd762c`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - graphify-out/graph.json
@@ -18,7 +23,7 @@
 - ItemsPage
 - NeedsPage
 - app/page.tsx
-- Navbar.tsx
+- dashboard/layout.tsx
 - WishlistPage
 - app/layout.tsx
 - ExpensesPage
@@ -29,6 +34,7 @@
 - next-env.d.ts
 - tailwind.config.ts
 - Integrate <KageLandingPage /> from ThreeUI using its exact source
+- todo.md
 
 ## God Nodes (most connected - your core abstractions)
 1. `dbConnect()` - 32 edges
@@ -61,14 +67,14 @@
 - **post-edit graph maintenance workflow** — graphify_update, graphify_out_graph_json, claude_md_graphify [EXTRACTED 0.85]
 - **graphify codebase question workflow** — claude_md_graphify, graphify_query, graphify_out_graph_json, graphify_out_wiki_index [EXTRACTED 0.85]
 
-## Communities (22 total, 3 thin omitted)
+## Communities (23 total, 4 thin omitted)
 
 ### Community 0 - "graphify-out/graph.json"
 Cohesion: 0.39
 Nodes (8): graphify project knowledge graph, graphify explain, graphify-out/graph.json, graphify-out/GRAPH_REPORT.md, graphify-out/wiki/index.md, graphify path, graphify query, graphify update .
 
 ### Community 1 - "dbConnect"
-Cohesion: 0.10
+Cohesion: 0.11
 Nodes (36): handler, auth(), authOptions, DELETE(), PUT(), GET(), POST(), DELETE() (+28 more)
 
 ### Community 2 - "dependencies"
@@ -93,10 +99,10 @@ Nodes (11): DIVISIONS, formatRp(), Need, NeedsPage(), load(), NeedRow(), remove(
 
 ### Community 7 - "app/page.tsx"
 Cohesion: 0.20
-Nodes (8): cards, chapters, Landing(), lessons, stats, useReveals(), WhaleScene, COLORS
+Nodes (5): features, stats, steps, WhaleScene, COLORS
 
-### Community 8 - "Navbar.tsx"
-Cohesion: 0.28
+### Community 8 - "dashboard/layout.tsx"
+Cohesion: 0.24
 Nodes (3): links, Navbar(), Whale()
 
 ### Community 9 - "WishlistPage"
@@ -104,8 +110,8 @@ Cohesion: 0.29
 Nodes (9): formatRp(), Wish, WishlistPage(), load(), purchase(), remove(), reset(), submit() (+1 more)
 
 ### Community 10 - "app/layout.tsx"
-Cohesion: 0.22
-Nodes (5): fredoka, metadata, nunito, LenisProvider(), Providers()
+Cohesion: 0.28
+Nodes (3): metadata, LenisProvider(), Providers()
 
 ### Community 11 - "ExpensesPage"
 Cohesion: 0.27
@@ -128,19 +134,19 @@ Cohesion: 0.40
 Nodes (4): Current configured usage, Exact implementation source, Implementation requirements, Integrate <KageLandingPage /> from ThreeUI using its exact source
 
 ## Knowledge Gaps
-- **91 isolated node(s):** `handler`, `DIVISIONS`, `Expense`, `Need`, `DIVISIONS` (+86 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 116 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **3 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **89 isolated node(s):** `handler`, `DIVISIONS`, `Expense`, `Need`, `DIVISIONS` (+84 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 117 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **4 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `dependencies` connect `dependencies` to `devDependencies`?**
-  _High betweenness centrality (0.035) - this node is a cross-community bridge._
+  _High betweenness centrality (0.036) - this node is a cross-community bridge._
 - **What connects `handler`, `DIVISIONS`, `Expense` to the rest of the system?**
-  _91 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _89 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `dbConnect` be split into smaller, more focused modules?**
-  _Cohesion score 0.10087719298245613 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1063973063973064 - nodes in this community are weakly interconnected._
 - **Should `dependencies` be split into smaller, more focused modules?**
   _Cohesion score 0.06451612903225806 - nodes in this community are weakly interconnected._
 - **Should `compilerOptions` be split into smaller, more focused modules?**

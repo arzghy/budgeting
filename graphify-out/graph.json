@@ -352,18 +352,6 @@
       "source_location": "L14"
     },
     {
-      "id": "app_dashboard_layout_dashboardlayout",
-      "label": "DashboardLayout()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "dbConnect",
-      "file_type": "code",
-      "norm_label": "dashboardlayout()",
-      "source_file": "app/dashboard/layout.tsx",
-      "source_location": "L6"
-    },
-    {
       "id": "app_dashboard_page_dashboard",
       "label": "Dashboard()",
       "_callable": true,
@@ -409,7 +397,7 @@
       "file_type": "code",
       "norm_label": "rootlayout()",
       "source_file": "app/layout.tsx",
-      "source_location": "L25"
+      "source_location": "L10"
     },
     {
       "id": "app_lenis_lenisprovider",
@@ -805,31 +793,31 @@
       "file_type": "code",
       "norm_label": "landing()",
       "source_file": "app/page.tsx",
-      "source_location": "L66"
+      "source_location": "L32"
     },
     {
-      "id": "app_page_usereveals",
-      "label": "useReveals()",
+      "id": "components_whalescene_coins",
+      "label": "Coins()",
       "_callable": true,
       "_origin": "ast",
       "community": 7,
       "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "usereveals()",
-      "source_file": "app/page.tsx",
-      "source_location": "L10"
-    },
-    {
-      "id": "components_whalescene_drift",
-      "label": "Drift()",
-      "_callable": true,
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "app/page.tsx",
-      "file_type": "code",
-      "norm_label": "drift()",
+      "norm_label": "coins()",
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L8"
+      "source_location": "L131"
+    },
+    {
+      "id": "components_whalescene_piggybank",
+      "label": "PiggyBank()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "app/page.tsx",
+      "file_type": "code",
+      "norm_label": "piggybank()",
+      "source_file": "components/WhaleScene.tsx",
+      "source_location": "L17"
     },
     {
       "id": "components_whalescene_whalescene",
@@ -841,7 +829,19 @@
       "file_type": "code",
       "norm_label": "whalescene()",
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L67"
+      "source_location": "L175"
+    },
+    {
+      "id": "app_dashboard_layout_dashboardlayout",
+      "label": "DashboardLayout()",
+      "_callable": true,
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "dashboard/layout.tsx",
+      "file_type": "code",
+      "norm_label": "dashboardlayout()",
+      "source_file": "app/dashboard/layout.tsx",
+      "source_location": "L6"
     },
     {
       "id": "app_login_page_login",
@@ -849,7 +849,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "login()",
       "source_file": "app/login/page.tsx",
@@ -861,7 +861,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "logincontent()",
       "source_file": "app/login/page.tsx",
@@ -873,7 +873,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "navbar()",
       "source_file": "components/Navbar.tsx",
@@ -885,7 +885,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "whale()",
       "source_file": "components/Whale.tsx",
@@ -897,7 +897,7 @@
       "_callable": true,
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "whaleoutline()",
       "source_file": "components/Whale.tsx",
@@ -1166,17 +1166,6 @@
       "source_location": "L1"
     },
     {
-      "id": "app_dashboard_layout",
-      "label": "dashboard/layout.tsx",
-      "_origin": "ast",
-      "community": 1,
-      "community_name": "dbConnect",
-      "file_type": "code",
-      "norm_label": "dashboard/layout.tsx",
-      "source_file": "app/dashboard/layout.tsx",
-      "source_location": "L1"
-    },
-    {
       "id": "app_dashboard_page",
       "label": "dashboard/page.tsx",
       "_origin": "ast",
@@ -1397,17 +1386,6 @@
       "source_location": "L1"
     },
     {
-      "id": "app_layout_fredoka",
-      "label": "fredoka",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "app/layout.tsx",
-      "file_type": "code",
-      "norm_label": "fredoka",
-      "source_file": "app/layout.tsx",
-      "source_location": "L13"
-    },
-    {
       "id": "app_layout_metadata",
       "label": "metadata",
       "_origin": "ast",
@@ -1416,18 +1394,7 @@
       "file_type": "code",
       "norm_label": "metadata",
       "source_file": "app/layout.tsx",
-      "source_location": "L20"
-    },
-    {
-      "id": "app_layout_nunito",
-      "label": "nunito",
-      "_origin": "ast",
-      "community": 10,
-      "community_name": "app/layout.tsx",
-      "file_type": "code",
-      "norm_label": "nunito",
-      "source_file": "app/layout.tsx",
-      "source_location": "L6"
+      "source_location": "L5"
     },
     {
       "id": "app_lenis",
@@ -2153,6 +2120,30 @@
       "source_location": "L1"
     },
     {
+      "id": "todo",
+      "label": "todo.md",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "todo.md",
+      "file_type": "document",
+      "node_kind": "page",
+      "norm_label": "todo.md",
+      "source_file": "todo.md",
+      "source_location": "L1"
+    },
+    {
+      "id": "todo_todo",
+      "label": "Todo",
+      "_origin": "ast",
+      "community": 22,
+      "community_name": "todo.md",
+      "file_type": "document",
+      "node_kind": "heading",
+      "norm_label": "todo",
+      "source_file": "todo.md",
+      "source_location": "L1"
+    },
+    {
       "id": "tsconfig",
       "label": "tsconfig.json",
       "_origin": "ast",
@@ -2802,37 +2793,15 @@
       "source_location": "L1"
     },
     {
-      "id": "app_page_cards",
-      "label": "cards",
+      "id": "app_page_features",
+      "label": "features",
       "_origin": "ast",
       "community": 7,
       "community_name": "app/page.tsx",
       "file_type": "code",
-      "norm_label": "cards",
+      "norm_label": "features",
       "source_file": "app/page.tsx",
-      "source_location": "L52"
-    },
-    {
-      "id": "app_page_chapters",
-      "label": "chapters",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "app/page.tsx",
-      "file_type": "code",
-      "norm_label": "chapters",
-      "source_file": "app/page.tsx",
-      "source_location": "L38"
-    },
-    {
-      "id": "app_page_lessons",
-      "label": "lessons",
-      "_origin": "ast",
-      "community": 7,
-      "community_name": "app/page.tsx",
-      "file_type": "code",
-      "norm_label": "lessons",
-      "source_file": "app/page.tsx",
-      "source_location": "L58"
+      "source_location": "L10"
     },
     {
       "id": "app_page_stats",
@@ -2843,7 +2812,18 @@
       "file_type": "code",
       "norm_label": "stats",
       "source_file": "app/page.tsx",
-      "source_location": "L45"
+      "source_location": "L19"
+    },
+    {
+      "id": "app_page_steps",
+      "label": "steps",
+      "_origin": "ast",
+      "community": 7,
+      "community_name": "app/page.tsx",
+      "file_type": "code",
+      "norm_label": "steps",
+      "source_file": "app/page.tsx",
+      "source_location": "L26"
     },
     {
       "id": "app_page_whalescene",
@@ -2876,14 +2856,25 @@
       "file_type": "code",
       "norm_label": "colors",
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L6"
+      "source_location": "L7"
+    },
+    {
+      "id": "app_dashboard_layout",
+      "label": "dashboard/layout.tsx",
+      "_origin": "ast",
+      "community": 8,
+      "community_name": "dashboard/layout.tsx",
+      "file_type": "code",
+      "norm_label": "dashboard/layout.tsx",
+      "source_file": "app/dashboard/layout.tsx",
+      "source_location": "L1"
     },
     {
       "id": "app_login_page",
       "label": "login/page.tsx",
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "login/page.tsx",
       "source_file": "app/login/page.tsx",
@@ -2894,7 +2885,7 @@
       "label": "Navbar.tsx",
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "navbar.tsx",
       "source_file": "components/Navbar.tsx",
@@ -2905,7 +2896,7 @@
       "label": "links",
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "links",
       "source_file": "components/Navbar.tsx",
@@ -2916,7 +2907,7 @@
       "label": "Whale.tsx",
       "_origin": "ast",
       "community": 8,
-      "community_name": "Navbar.tsx",
+      "community_name": "dashboard/layout.tsx",
       "file_type": "code",
       "norm_label": "whale.tsx",
       "source_file": "components/Whale.tsx",
@@ -3781,18 +3772,6 @@
       "context": "call",
       "source_file": "app/dashboard/wishlist/page.tsx",
       "source_location": "L42",
-      "weight": 1.0
-    },
-    {
-      "source": "app_page_landing",
-      "target": "app_page_usereveals",
-      "relation": "calls",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "context": "call",
-      "source_file": "app/page.tsx",
-      "source_location": "L69",
       "weight": 1.0
     },
     {
@@ -4681,7 +4660,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "app/layout.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -5557,7 +5536,7 @@
       "confidence_score": 1.0,
       "context": "import",
       "source_file": "app/layout.tsx",
-      "source_location": "L4",
+      "source_location": "L3",
       "weight": 1.0
     },
     {
@@ -6181,13 +6160,13 @@
     },
     {
       "source": "app_layout",
-      "target": "app_layout_fredoka",
+      "target": "app_layout_rootlayout",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/layout.tsx",
-      "source_location": "L13",
+      "source_location": "L10",
       "weight": 1.0
     },
     {
@@ -6198,29 +6177,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/layout.tsx",
-      "source_location": "L20",
-      "weight": 1.0
-    },
-    {
-      "source": "app_layout",
-      "target": "app_layout_rootlayout",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/layout.tsx",
-      "source_location": "L25",
-      "weight": 1.0
-    },
-    {
-      "source": "app_layout",
-      "target": "app_layout_nunito",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/layout.tsx",
-      "source_location": "L6",
+      "source_location": "L5",
       "weight": 1.0
     },
     {
@@ -6258,7 +6215,7 @@
     },
     {
       "source": "app_page",
-      "target": "app_page_usereveals",
+      "target": "app_page_features",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
@@ -6269,46 +6226,24 @@
     },
     {
       "source": "app_page",
-      "target": "app_page_chapters",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/page.tsx",
-      "source_location": "L38",
-      "weight": 1.0
-    },
-    {
-      "source": "app_page",
       "target": "app_page_stats",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L45",
+      "source_location": "L19",
       "weight": 1.0
     },
     {
       "source": "app_page",
-      "target": "app_page_cards",
+      "target": "app_page_steps",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L52",
-      "weight": 1.0
-    },
-    {
-      "source": "app_page",
-      "target": "app_page_lessons",
-      "relation": "contains",
-      "_origin": "ast",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "app/page.tsx",
-      "source_location": "L58",
+      "source_location": "L26",
       "weight": 1.0
     },
     {
@@ -6319,7 +6254,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L66",
+      "source_location": "L32",
       "weight": 1.0
     },
     {
@@ -6434,13 +6369,24 @@
     },
     {
       "source": "components_whalescene",
-      "target": "components_whalescene_colors",
+      "target": "components_whalescene_coins",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L6",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "components_whalescene",
+      "target": "components_whalescene_piggybank",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "components/WhaleScene.tsx",
+      "source_location": "L17",
       "weight": 1.0
     },
     {
@@ -6451,18 +6397,18 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L67",
+      "source_location": "L175",
       "weight": 1.0
     },
     {
       "source": "components_whalescene",
-      "target": "components_whalescene_drift",
+      "target": "components_whalescene_colors",
       "relation": "contains",
       "_origin": "ast",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "components/WhaleScene.tsx",
-      "source_location": "L8",
+      "source_location": "L7",
       "weight": 1.0
     },
     {
@@ -7159,6 +7105,17 @@
       "weight": 1.0
     },
     {
+      "source": "todo",
+      "target": "todo_todo",
+      "relation": "contains",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "todo.md",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
       "source": "tsconfig",
       "target": "tsconfig_include",
       "relation": "contains",
@@ -7535,5 +7492,6 @@
       "confidence_score": 0.85,
       "source_file": "CLAUDE.md"
     }
-  ]
+  ],
+  "built_at_commit": "e1dd762c0c62470963ee8e977f5a0103a558fd6f"
 }

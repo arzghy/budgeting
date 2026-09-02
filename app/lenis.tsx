@@ -9,17 +9,19 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
     const lenis = new Lenis({
       smoothWheel: true,
       lerp: 0.08,
-      wheelMultiplier: 0.8,
+      wheelMultiplier: 0.9,
     });
     lenisRef.current = lenis;
+
+    let tickerCallback: ((time: number) => void) | null = null;
+    let gsapInstance: any = null;
 
     // Sync Lenis with GSAP ScrollTrigger
     const syncScrollTrigger = async () => {
       try {
-        const gsapModule = await import("gsap");
-        const scrollTriggerModule = await import("gsap/ScrollTrigger");
-        const gsap = gsapModule.default;
-        const ScrollTrigger = scrollTriggerModule.ScrollTrigger;
+        const { gsap } = await import("gsap");
+        const { ScrollTrigger } = await import("gsap/ScrollTrigger");
+        gsapInstance = gsap;
 
         gsap.registerPlugin(ScrollTrigger);
 
@@ -29,23 +31,28 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
         });
 
         // Use Lenis requestAnimationFrame with GSAP ticker
-        gsap.ticker.add((time) => {
+        tickerCallback = (time: number) => {
           lenis.raf(time * 1000);
-        });
+        };
+        gsap.ticker.add(tickerCallback);
         gsap.ticker.lagSmoothing(0);
       } catch (e) {
-        // GSAP not loaded yet, fallback to basic raf loop
+        // Fallback standard animation frame loop
+        let reqId: number;
         function raf(time: number) {
           lenis.raf(time);
-          requestAnimationFrame(raf);
+          reqId = requestAnimationFrame(raf);
         }
-        requestAnimationFrame(raf);
+        reqId = requestAnimationFrame(raf);
       }
     };
 
     syncScrollTrigger();
 
     return () => {
+      if (tickerCallback && gsapInstance) {
+        gsapInstance.ticker.remove(tickerCallback);
+      }
       lenis.destroy();
       lenisRef.current = null;
     };

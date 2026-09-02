@@ -150,9 +150,9 @@
     "semantic_hash": ""
   },
   "app/page.tsx": {
-    "mtime": 1788188566.353208,
-    "seen": 1788188678.833664,
-    "ast_hash": "fc4a2730d7a0870190050ff946b7356f",
+    "mtime": 1788191648.5534415,
+    "seen": 1788191933.5611186,
+    "ast_hash": "154fafc8457daf7e2cdb842d2f5ddedc",
     "semantic_hash": ""
   },
   "app/providers.tsx": {
@@ -180,9 +180,9 @@
     "semantic_hash": ""
   },
   "components/WhaleScene.tsx": {
-    "mtime": 1788179651.235013,
-    "seen": 1788188678.833681,
-    "ast_hash": "4f72e3eca4a2a31242d2d9c95f4563fb",
+    "mtime": 1788191872.3343332,
+    "seen": 1788191933.5611348,
+    "ast_hash": "bd1ba29b57622f049d3a5470e2011024",
     "semantic_hash": ""
   },
   "lib/mongodb.ts": {
@@ -246,9 +246,9 @@
     "semantic_hash": ""
   },
   "tailwind.config.ts": {
-    "mtime": 1788188291.2750437,
-    "seen": 1788188678.8337245,
-    "ast_hash": "67b158c23d599e42459c5b59db7ada0b",
+    "mtime": 1788191734.2087255,
+    "seen": 1788191933.5611665,
+    "ast_hash": "2d1c6a436875b28b411917c17ad437f3",
     "semantic_hash": ""
   },
   "tsconfig.json": {
@@ -273,6 +273,12 @@
     "mtime": 1788162447.8084285,
     "seen": 1788188678.8337553,
     "ast_hash": "b29e26ced63d94c402498a9a5c11ee38",
+    "semantic_hash": ""
+  },
+  "design.md": {
+    "mtime": 1788190255.0418594,
+    "seen": 1788191933.5611799,
+    "ast_hash": "0d2912f1475935eb6178dfb5fccf4c56",
     "semantic_hash": ""
   }
 }
