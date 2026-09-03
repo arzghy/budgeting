@@ -13,6 +13,8 @@ untuk pacar saya. berikut permintaan fiturnya:
 5. di save money, ada section nabung untuk wish list dan nabung untuk jaga jaga.
 6. saat buka web, menampilkan landing page terkait fiturnya kemudian untuk mengakses fiturnya, harus login terlebih dahulu
 7. ada system auth login yang terintegrasi dengan OAuth Google
-8. pakai tech stack next.js, mongodb, three.js
-9. tambahkan library lenis smooth scrolling, lottiefiles karena mau buat webnya lucu
-10. dia suka paus, jangan lupa tambahin unsur yang ada paus (tapi jangan pakai emoji)
+8. pakai tech stack next.js, mongodb
+9. tambahkan library gsap, lenis smooth scrolling, lottiefiles karena mau buat webnya lucu
+10. pakai skills frontend-design by antropic, impaccable, dan taste skills supaya tidak AI Slop
+11. nama webnya adalah MiBudge
+12. Buat dari landing page dulu, kemudian /login, /register, /reset, lalu /dashboard terakhir
