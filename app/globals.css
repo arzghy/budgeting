@@ -56,6 +56,8 @@ html, body {
 [class*="shadow-[0_5px"], [class*="shadow-sticker"] { box-shadow: 0 14px 34px rgba(79, 93, 57, 0.1); }
 button, a, input, select, textarea { transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; }
+.password-input::-ms-reveal, .password-input::-ms-clear { display: none; }
+.password-input::-webkit-credentials-auto-fill-button { visibility: hidden; pointer-events: none; }
 
 ::selection { background: var(--sage); color: var(--ink); }
 
