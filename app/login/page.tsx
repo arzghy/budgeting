@@ -46,7 +46,7 @@ function LoginContent() {
       } else {
         router.push(callbackUrl);
       }
-    } catch (err) {
+    } catch {
       setError("Terjadi kesalahan saat masuk. Coba lagi.");
       setLoading(false);
     }

@@ -36,14 +36,13 @@ export default function LenisProvider({ children }: { children: React.ReactNode 
         };
         gsap.ticker.add(tickerCallback);
         gsap.ticker.lagSmoothing(0);
-      } catch (e) {
+      } catch {
         // Fallback standard animation frame loop
-        let reqId: number;
         function raf(time: number) {
           lenis.raf(time);
-          reqId = requestAnimationFrame(raf);
+          requestAnimationFrame(raf);
         }
-        reqId = requestAnimationFrame(raf);
+        requestAnimationFrame(raf);
       }
     };
 

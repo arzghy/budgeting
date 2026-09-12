@@ -125,7 +125,6 @@ export default function NeedsPage() {
 
   const tersisa = list.filter((n) => n.status === "tersisa");
   const habis = list.filter((n) => n.status === "habis");
-  const totalEstimatedCost = list.reduce((s, n) => s + (n.amount || 0), 0);
 
   function NeedRow({ n, isHabis }: { n: Need; isHabis: boolean }) {
     const divObj = DIVISIONS.find((d) => d.key === n.division) || { label: n.division, icon: "🛒" };

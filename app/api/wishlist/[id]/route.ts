@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { Wishlist } from "@/models/Wishlist";
 import { Expense } from "@/models/Expense";
-import { Saving } from "@/models/Saving";
 import { auth } from "@/app/api/auth/options";
 
 export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {

@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg: #fffdf6;
-  --paper: #ffffff;
-  --ink: #1f2b18;
-  --ink-soft: #45543c;
+  --bg: #f8f8f2;
+  --paper: #fffef9;
+  --ink: #203022;
+  --ink-soft: #5d6b5c;
   --sage: #c2d772;
-  --sage-deep: #8a9e42;
+  --sage-deep: #647534;
   --rose: #f6dbe2;
   --peach: #f6c5c1;
-  --cream: #fff9e6;
-  --line: rgba(31, 43, 24, 0.15);
+  --cream: #f6ffd3;
+  --line: rgba(32, 48, 34, 0.14);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   color-scheme: light;
 }
@@ -31,6 +31,10 @@
   color-scheme: dark;
 }
 
+.typewriter-caret { display: inline-block; width: 2px; height: 1em; margin-left: 0.18em; vertical-align: -0.12em; background: currentColor; animation: caret-blink 0.8s step-end infinite; }
+@keyframes caret-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .typewriter-caret { display: none; } }
+
 html, body {
   background: var(--bg);
   color: var(--ink);
@@ -47,6 +51,11 @@ html, body {
 }
 
 * { box-sizing: border-box; }
+
+[class*="border-2"] { border-width: 1px; }
+[class*="shadow-[0_5px"], [class*="shadow-sticker"] { box-shadow: 0 14px 34px rgba(79, 93, 57, 0.1); }
+button, a, input, select, textarea { transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid var(--sage-deep); outline-offset: 3px; }
 
 ::selection { background: var(--sage); color: var(--ink); }
 
@@ -117,24 +126,22 @@ html, body {
   background: var(--line);
 }
 
-/* ── Neo-pastel Card system ── */
 .card {
-  background: var(--paper);
-  border: 2px solid var(--ink);
-  border-radius: 1.5rem;
-  box-shadow: 0 6px 0 rgba(31, 43, 24, 0.18);
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  box-shadow: 0 18px 45px rgba(79, 93, 57, 0.08);
   transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
 }
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 0 rgba(31, 43, 24, 0.18);
+  box-shadow: 0 22px 50px rgba(79, 93, 57, 0.12);
 }
 
 .card-ghost {
-  background: rgba(255, 253, 246, 0.7);
-  border: 2px dashed rgba(31, 43, 24, 0.28);
-  border-radius: 1.5rem;
-  backdrop-filter: blur(8px);
+  background: transparent;
+  border: 1px dashed var(--line);
+  border-radius: 1rem;
 }
 
 /* ── Neo-pastel Button system ── */
@@ -143,28 +150,20 @@ html, body {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: 9999px;
+  border-radius: 0.375rem;
   font-weight: 700;
   font-family: inherit;
   cursor: pointer;
-  border: 2px solid var(--ink);
-  box-shadow: 0 4px 0 rgba(31, 43, 24, 0.2);
-  transition: transform 0.12s var(--ease-out), box-shadow 0.12s var(--ease-out), background 0.18s ease;
+  border: 1px solid transparent;
+  transition: transform 0.18s var(--ease-out), background-color 0.18s ease;
   user-select: none;
 }
-.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 0 rgba(31, 43, 24, 0.2);
-}
-.btn:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 rgba(31, 43, 24, 0.2);
-}
+.btn:hover { transform: translateY(-1px); }
+.btn:active { transform: translateY(1px); }
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none;
-  box-shadow: 0 2px 0 rgba(31, 43, 24, 0.15);
 }
 
 .btn-primary {
@@ -257,6 +256,11 @@ html, body {
 }
 
 /* ── Gentle float animation ── */
+@keyframes marquee { to { transform: translateX(-25%); } }
+.tech-marquee { animation: marquee 28s linear infinite; }
+@media (prefers-reduced-motion: reduce) { .tech-marquee { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .animate-\[marquee_22s_linear_infinite\] { animation: none; } }
+
 @keyframes bob {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-8px); }

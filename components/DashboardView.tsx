@@ -10,7 +10,6 @@ import {
   faPen,
   faLightbulb,
   faShieldHalved,
-  faLeaf,
   faStar,
   faCartShopping,
   faArrowRight,
@@ -77,12 +76,10 @@ function getInitials(name: string) {
 export default function DashboardView({
   userName,
   expenses = [],
-  items = [],
   needs = [],
   savings = [],
   wishlists = [],
 }: DashboardViewProps) {
-  const [chartPeriod, setChartPeriod] = useState<"6m" | "weekly">("6m");
   const [hoveredDonutIdx, setHoveredDonutIdx] = useState<number | null>(null);
 
   // ── Profile State from MongoDB ──

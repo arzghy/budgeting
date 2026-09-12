@@ -11,14 +11,14 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Whale Budgeting",
-  description: "Sanctuary Keuangan Interaktif & Estetik",
+  title: "MiBudge",
+  description: "Budgeting personal untuk pengeluaran, kebutuhan, wishlist, dan tabungan.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="id" className={plusJakartaSans.variable}>
-      <body className="font-sans antialiased text-[#232b1a]">
+      <body className="font-sans antialiased">
         <Providers>{children}</Providers>
       </body>
     </html>

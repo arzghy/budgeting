@@ -126,7 +126,6 @@ export default function WishlistPage() {
 
   const totalTarget = list.reduce((s, w) => s + (w.target || 0), 0);
   const totalSaved = list.reduce((s, w) => s + (w.saved || 0), 0);
-  const purchasedCount = list.filter((w) => w.purchased).length;
   const overallPercent = totalTarget > 0 ? Math.round((totalSaved / totalTarget) * 100) : 0;
 
   return (

@@ -37,7 +37,6 @@ export default function ItemsPage({
   const [search, setSearch] = useState("");
 
   const icon = category === "skincare" ? "🧴" : "💄";
-  const bgBadge = category === "skincare" ? "bg-sage/40 text-ink" : "bg-blush text-ink";
 
   async function load() {
     try {
@@ -132,7 +131,6 @@ export default function ItemsPage({
   }
 
   const totalValue = items.reduce((s, it) => s + (it.price || 0) * (it.stock || 1), 0);
-  const totalStock = items.reduce((s, it) => s + (it.stock || 0), 0);
 
   const filteredItems = items.filter((it) =>
     it.name.toLowerCase().includes(search.toLowerCase()) ||

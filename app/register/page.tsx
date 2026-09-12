@@ -54,7 +54,7 @@ function RegisterContent() {
       } else {
         router.push(callbackUrl);
       }
-    } catch (err) {
+    } catch {
       setError("Terjadi kesalahan saat mendaftar. Coba lagi.");
       setLoading(false);
     }

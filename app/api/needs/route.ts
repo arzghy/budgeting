@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import { Need } from "@/models/Need";
-import { Expense } from "@/models/Expense";
 import { auth } from "@/app/api/auth/options";
 
 export async function GET() {
