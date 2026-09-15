@@ -1,5 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowUpRightFromSquare,
+  faBookmark,
+  faCoins,
+  faReceipt,
+  faTrashCan,
+  faPlus,
+  faVault,
+} from "@fortawesome/free-solid-svg-icons";
 
 type Saving = {
   _id: string;
@@ -120,69 +130,61 @@ export default function SavePage() {
   const total = totalWishlist + totalJaga;
 
   return (
-    <div className="space-y-6">
+    <div className="save-page space-y-10 sm:space-y-12">
       {/* ═══ HEADER & METRICS ═══ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/80 px-3 py-1 text-xs font-bold text-ink shadow-sm">
-            <span>🏦</span>
-            <span>Pilar Tabungan & Celengan</span>
-          </div>
-          <h1 className="font-display mt-2 text-2xl sm:text-3xl font-bold text-[#242f1b]">
+<div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-sage-deep">
+             <FontAwesomeIcon icon={faReceipt} />
+             <span>Ruang tabungan</span>
+           </div>
+          <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.045em] text-ink sm:text-4xl">
             Celengan Ganda (Nabung)
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-ink/70">
+          <p className="mt-3 max-w-[42rem] text-xs font-semibold leading-6 text-ink/70 sm:text-sm">
             Pisahkan tabungan impian untuk wishlist dan dana darurat untuk kebutuhan jaga-jaga.
           </p>
         </div>
 
-        <div className="rounded-2xl border-2 border-ink/15 bg-sage/40 px-5 py-3 text-center shadow-sm shrink-0">
-          <span className="block text-[10px] font-bold uppercase text-ink/60">Total Tabungan Akumulasi</span>
-          <span className="font-display text-2xl font-bold text-[#242f1b]">{formatRp(total)}</span>
-        </div>
+<div className="shrink-0 rounded-xl bg-[#c2d772] px-5 py-4 text-left">
+           <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Total tabungan</span>
+           <span className="font-display mt-1 block text-xl font-extrabold text-ink">{formatRp(total)}</span>
+         </div>
       </div>
 
       {/* ═══ 2 PILLAR SUMMARY CARDS ═══ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="card bg-blush/60 p-5 border-2 border-ink transition hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-ink/70">Pilar 1: Tabungan Wishlist</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white text-xs shadow-sm">⭐</span>
-          </div>
-          <div className="font-display mt-2 text-2xl font-bold text-ink leading-tight">
-            {formatRp(totalWishlist)}
-          </div>
-          <p className="mt-1 text-xs font-semibold text-ink/60">
-            Terhubung otomatis ke target barang idamanmu
-          </p>
-        </div>
+<div className="grid grid-cols-1 gap-px overflow-hidden rounded-xl bg-ink/10 sm:grid-cols-2">
+         <section className="save-pillar bg-[#f6dbe2] p-6">
+           <div className="flex items-center justify-between">
+             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Wishlist</span>
+             <FontAwesomeIcon icon={faBookmark} className="text-ink/60" />
+           </div>
+           <div className="font-display mt-3 text-2xl font-extrabold text-ink">{formatRp(totalWishlist)}</div>
+           <p className="mt-2 max-w-sm text-xs font-semibold leading-5 text-ink/60">Terhubung otomatis ke target barang idamanmu.</p>
+         </section>
 
-        <div className="card bg-sage/60 p-5 border-2 border-ink transition hover:-translate-y-0.5">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-ink/70">Pilar 2: Dana Jaga-Jaga</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white text-xs shadow-sm">🛡️</span>
-          </div>
-          <div className="font-display mt-2 text-2xl font-bold text-ink leading-tight">
-            {formatRp(totalJaga)}
-          </div>
-          <p className="mt-1 text-xs font-semibold text-ink/60">
-            Cadangan darurat siap pakai kapan saja
-          </p>
-        </div>
-      </div>
+         <section className="save-pillar bg-[#c2d772] p-6">
+           <div className="flex items-center justify-between">
+             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Jaga-jaga</span>
+             <FontAwesomeIcon icon={faVault} className="text-ink/60" />
+           </div>
+           <div className="font-display mt-3 text-2xl font-extrabold text-ink">{formatRp(totalJaga)}</div>
+           <p className="mt-2 max-w-sm text-xs font-semibold leading-5 text-ink/60">Cadangan darurat yang bisa dipakai kapan saja.</p>
+         </section>
+       </div>
 
       {/* ═══ FORM INPUT (WITH URL FIELD) ═══ */}
-      <form onSubmit={submit} className="card bg-paper p-5 sm:p-7 space-y-4 border-2 border-ink shadow-sticker">
-        <div className="flex items-center gap-2 border-b border-ink/10 pb-3">
-          <span className="grid h-7 w-7 place-items-center rounded-xl bg-sage font-bold text-xs">
-            🏦
-          </span>
+      <form onSubmit={submit} className="save-panel bg-[#f6ffd3] p-6 sm:p-9 space-y-7">
+<div className="flex items-center gap-3 border-b border-ink/10 pb-5">
+           <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#f6c5c1] font-bold text-xs text-ink">
+             <FontAwesomeIcon icon={faReceipt} />
+           </span>
           <h2 className="font-display text-base sm:text-lg font-bold text-[#242f1b]">
             Setor / Catat Tabungan Baru
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-12">
+        <div className="save-form-fields grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-12 sm:gap-6">
           {/* Tipe Celengan */}
           <div className="sm:col-span-4">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink/75 mb-1">
@@ -195,10 +197,10 @@ export default function SavePage() {
                 setRefId("");
                 setName("");
               }}
-              className="field"
+              className="field save-field"
             >
-              <option value="jagajaga">🛡️ Dana Jaga-Jaga (Darurat)</option>
-              <option value="wishlist">⭐ Untuk Wishlist Tertentu</option>
+<option value="jagajaga">Dana jaga-jaga (darurat)</option>
+               <option value="wishlist">Untuk wishlist tertentu</option>
             </select>
           </div>
 
@@ -215,7 +217,7 @@ export default function SavePage() {
                   setName(e.target.value);
                 }}
                 required
-                className="field"
+                className="field save-field"
               >
                 <option value="">-- Pilih Wishlist Terdaftar --</option>
                 {wishes.map((w) => (
@@ -229,7 +231,7 @@ export default function SavePage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Contoh: Sisih gaji bulan ini / Tabungan cadangan"
-                className="field"
+                className="field save-field"
               />
             )}
           </div>
@@ -245,7 +247,7 @@ export default function SavePage() {
               type="number"
               placeholder="Contoh: 500000"
               required
-              className="field"
+              className="field save-field"
             />
           </div>
 
@@ -260,52 +262,52 @@ export default function SavePage() {
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://mutasi.link/... atau bukti transfer bank"
                 type="url"
-                className="field pl-9"
+                className="field save-field pl-9"
               />
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink/40">🔗</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink/40">
+                 <FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-xs" />
+               </span>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 pt-2">
-          <button disabled={loading} className="btn btn-primary text-xs sm:text-sm">
-            <span>{loading ? "Menyimpan..." : "+ Masukkan ke Celengan"}</span>
-            <span>→</span>
+<div className="mt-2 border-t border-ink/10 pt-5">
+           <button disabled={loading} className="btn btn-primary min-h-11 px-5 text-xs sm:text-sm">
+             <FontAwesomeIcon icon={loading ? faCoins : faPlus} className={loading ? "animate-pulse" : ""} />
+             <span>{loading ? "Menyimpan..." : "Masukkan ke celengan"}</span>
           </button>
         </div>
       </form>
 
       {/* ═══ SAVINGS HISTORY LIST (WITH URL LINK PREVIEW) ═══ */}
-      <div className="space-y-3">
-        <h2 className="font-display text-lg font-bold text-[#242f1b]">
+<div className="save-history space-y-5">
+         <h2 className="font-display text-lg font-bold tracking-[-0.02em] text-ink">
           Riwayat Setoran Tabungan
         </h2>
 
         {savings.length === 0 && (
-          <div className="card bg-paper/70 border-dashed border-2 border-ink/20 p-10 text-center text-sm font-semibold text-ink/60">
-            <span className="text-3xl block mb-2">🏦</span>
+<div className="save-empty bg-[#f6ffd3]/45 p-10 text-center text-sm font-semibold text-ink/60">
+             <FontAwesomeIcon icon={faReceipt} className="mb-3 block w-full text-2xl text-sage-deep" />
             Belum ada catatan setoran tabungan. Mulai nabung sekarang!
           </div>
         )}
 
         {savings.map((s) => (
-          <div
-            key={s._id}
-            className="card bg-paper p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-2 border-ink/15 transition hover:shadow-sticker"
-          >
+<article
+             key={s._id}
+             className={`saving-row ${s.type === "wishlist" ? "saving-row-wishlist" : "saving-row-emergency"}`}
+           >
             <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-              <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-cream border border-ink/15 text-base shadow-sm">
-                {s.type === "wishlist" ? "⭐" : "🛡️"}
-              </span>
+<span className={`saving-row-icon ${s.type === "wishlist" ? "bg-[#f6dbe2]" : "bg-[#f6ffd3]"}`}>
+                 <FontAwesomeIcon icon={s.type === "wishlist" ? faBookmark : faVault} />
+               </span>
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-display text-base font-bold text-[#242f1b]">
                     {s.name}
                   </h3>
                   <span
-                    className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                      s.type === "wishlist" ? "bg-peach text-ink" : "bg-sage/40 text-ink"
-                    }`}
+className={`saving-status ${s.type === "wishlist" ? "saving-status-wishlist" : "saving-status-emergency"}`}
                   >
                     {s.type === "wishlist" ? "Pilar Wishlist" : "Pilar Jaga-Jaga"}
                   </span>
@@ -327,8 +329,8 @@ export default function SavePage() {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 font-bold text-sage-deep hover:underline"
                       >
-                        <span>🔗 Buka Link Bukti</span>
-                        <span className="text-[10px]">↗</span>
+<FontAwesomeIcon icon={faArrowUpRightFromSquare} className="text-[10px]" />
+                         <span>Buka link bukti</span>
                       </a>
                     </>
                   )}
@@ -336,18 +338,13 @@ export default function SavePage() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-ink/10">
-              <div className="font-display text-lg font-bold text-sage-deep">
-                + {formatRp(s.amount)}
-              </div>
-              <button
-                onClick={() => remove(s._id)}
-                className="rounded-full border border-ink/20 bg-[#fde8e7] px-3 py-1 text-xs font-bold text-[#c44f45] transition hover:bg-[#fbd0ce]"
-              >
-                Hapus
-              </button>
-            </div>
-          </div>
+<div className="saving-row-action">
+               <div className="font-display text-lg font-extrabold text-sage-deep">+ {formatRp(s.amount)}</div>
+               <button onClick={() => remove(s._id)} className="saving-delete">
+                 <FontAwesomeIcon icon={faTrashCan} /> Hapus
+               </button>
+             </div>
+           </article>
         ))}
       </div>
     </div>

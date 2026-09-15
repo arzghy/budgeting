@@ -1,5 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowsRotate,
+  faBoxesStacked,
+  faCheck,
+  faHouse,
+  faLink,
+  faPenToSquare,
+  faPlus,
+  faTrashCan,
+  faUtensils,
+  faShower,
+} from "@fortawesome/free-solid-svg-icons";
 
 type Need = {
   _id: string;
@@ -11,10 +24,10 @@ type Need = {
 };
 
 const DIVISIONS = [
-  { key: "kebutuhan", label: "Pokok", icon: "🛒" },
-  { key: "dapur", label: "Dapur", icon: "🍳" },
-  { key: "mandi", label: "Kamar Mandi", icon: "🚿" },
-  { key: "rumah", label: "Rumah Tangga", icon: "🏠" },
+  { key: "kebutuhan", label: "Pokok", icon: faBoxesStacked },
+  { key: "dapur", label: "Dapur", icon: faUtensils },
+  { key: "mandi", label: "Kamar Mandi", icon: faShower },
+  { key: "rumah", label: "Rumah Tangga", icon: faHouse },
 ];
 
 function formatRp(n: number) {
@@ -127,117 +140,100 @@ export default function NeedsPage() {
   const habis = list.filter((n) => n.status === "habis");
 
   function NeedRow({ n, isHabis }: { n: Need; isHabis: boolean }) {
-    const divObj = DIVISIONS.find((d) => d.key === n.division) || { label: n.division, icon: "🛒" };
+    const divObj = DIVISIONS.find((d) => d.key === n.division) || { label: n.division, icon: faBoxesStacked };
 
     return (
-      <div
-        className={`card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-2 transition ${
-          isHabis ? "bg-blush/40 border-coral/30" : "bg-paper border-ink/15 hover:shadow-sticker"
-        }`}
-      >
-        <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-cream border border-ink/15 text-base shadow-sm">
-            {divObj.icon}
+      <article className={`needs-row ${isHabis ? "needs-row-empty" : "needs-row-ready"}`}>
+        <div className="flex min-w-0 items-start gap-4">
+          <span className={`needs-row-icon ${isHabis ? "bg-[#f6dbe2] text-[#c44f45]" : "bg-[#f6ffd3] text-sage-deep"}`}>
+            <FontAwesomeIcon icon={divObj.icon} />
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
-              <h3 className={`font-display text-base font-bold leading-tight ${isHabis ? "line-through text-ink/50" : "text-[#242f1b]"}`}>
+              <h3 className={`font-display text-base font-bold leading-tight ${isHabis ? "text-ink/55 line-through" : "text-ink"}`}>
                 {n.name}
               </h3>
-              {isHabis && (
-                <span className="rounded-full bg-coral/30 px-2 py-0.5 text-[9px] font-bold text-[#c44f45]">
-                  Habis · Auto Pengeluaran
-                </span>
-              )}
+              {isHabis && <span className="needs-status needs-status-empty">Perlu dibeli</span>}
             </div>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
+            <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
               <span className="font-bold text-ink/80">{formatRp(n.amount)}</span>
-              <span className="text-ink/30">·</span>
-              <span className="font-semibold text-ink/60">{divObj.label}</span>
+              <span className="text-ink/30">{divObj.label}</span>
               {n.url && (
-                <>
-                  <span className="text-ink/30">·</span>
-                  <a
-                    href={n.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 font-bold text-sage-deep hover:underline"
-                  >
-                    <span>🔗 Link Beli</span>
-                    <span className="text-[10px]">↗</span>
-                  </a>
-                </>
+                <a href={n.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-bold text-sage-deep hover:underline">
+                  <FontAwesomeIcon icon={faLink} className="text-[10px]" />
+                  <span>Link beli</span>
+                </a>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 border-t sm:border-t-0 pt-2 sm:pt-0 border-ink/10">
-          <button
-            onClick={() => toggleStatus(n)}
-            className={`btn text-xs font-bold ${isHabis ? "btn-ghost" : "btn-primary"}`}
-          >
-            {isHabis ? "🔄 Reset Stok Ada" : "✓ Tandai Habis"}
+        <div className="needs-row-actions">
+          <button onClick={() => toggleStatus(n)} className={`needs-action ${isHabis ? "needs-action-secondary" : "needs-action-primary"}`}>
+            <FontAwesomeIcon icon={isHabis ? faArrowsRotate : faCheck} />
+            <span>{isHabis ? "Stok tersedia" : "Tandai habis"}</span>
           </button>
-          <button onClick={() => startEdit(n)} className="btn btn-ghost text-xs">
-            Edit
+          <button onClick={() => startEdit(n)} className="needs-action needs-action-secondary">
+            <FontAwesomeIcon icon={faPenToSquare} />
+            <span>Edit</span>
           </button>
-          <button onClick={() => remove(n._id)} className="btn btn-blush text-xs">
-            Hapus
+          <button onClick={() => remove(n._id)} className="needs-action needs-action-danger">
+            <FontAwesomeIcon icon={faTrashCan} />
+            <span>Hapus</span>
           </button>
         </div>
-      </div>
+      </article>
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="needs-page space-y-10 sm:space-y-12">
       {/* ═══ HEADER & METRICS ═══ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-ink/10 bg-white/80 px-3 py-1 text-xs font-bold text-ink shadow-sm">
-            <span>🛒</span>
-            <span>Manajemen Kebutuhan Pokok</span>
-          </div>
-          <h1 className="font-display mt-2 text-2xl sm:text-3xl font-bold text-[#242f1b]">
+<div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-sage-deep">
+             <FontAwesomeIcon icon={faBoxesStacked} />
+             <span>Daftar kebutuhan</span>
+           </div>
+          <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.045em] text-ink sm:text-4xl">
             Kebutuhan Rumah Tangga
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-ink/70">
+          <p className="mt-3 max-w-[42rem] text-xs font-semibold leading-6 text-ink/70 sm:text-sm">
             Daftar kebutuhan logistik harian. Saat ditandai habis, otomatis terkonversi ke pos pengeluaran.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="rounded-2xl border-2 border-ink/15 bg-sage/40 px-4 py-2.5 text-center shadow-sm">
-            <span className="block text-[10px] font-bold uppercase text-ink/60">Tersisa</span>
-            <span className="font-display text-lg font-bold text-ink">{tersisa.length} Item</span>
-          </div>
-          <div className="rounded-2xl border-2 border-ink/15 bg-blush px-4 py-2.5 text-center shadow-sm">
-            <span className="block text-[10px] font-bold uppercase text-ink/60">Perlu Beli</span>
-            <span className="font-display text-lg font-bold text-[#c44f45]">{habis.length} Item</span>
-          </div>
-        </div>
+<div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-ink/10 sm:min-w-[18rem]">
+           <div className="bg-[#f6ffd3] px-4 py-3 text-left">
+             <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Tersisa</span>
+             <span className="font-display mt-1 block text-base font-extrabold text-ink">{tersisa.length} item</span>
+           </div>
+           <div className="bg-[#f6dbe2] px-4 py-3 text-left">
+             <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Perlu beli</span>
+             <span className="font-display mt-1 block text-base font-extrabold text-[#c44f45]">{habis.length} item</span>
+           </div>
+         </div>
       </div>
 
       {/* ═══ FORM INPUT (WITH URL FIELD) ═══ */}
-      <form onSubmit={submit} className="card bg-paper p-5 sm:p-7 space-y-4 border-2 border-ink shadow-sticker">
-        <div className="flex items-center justify-between border-b border-ink/10 pb-3">
-          <div className="flex items-center gap-2">
-            <span className="grid h-7 w-7 place-items-center rounded-xl bg-sage font-bold text-xs">
-              {editing ? "✏️" : "🛒"}
-            </span>
+      <form onSubmit={submit} className="needs-panel bg-[#f6ffd3] p-6 sm:p-9 space-y-7">
+<div className="flex items-center justify-between border-b border-ink/10 pb-5">
+           <div className="flex items-center gap-3">
+             <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#f6c5c1] font-bold text-xs text-ink">
+               <FontAwesomeIcon icon={editing ? faPenToSquare : faPlus} />
+             </span>
             <h2 className="font-display text-base sm:text-lg font-bold text-[#242f1b]">
               {editing ? "Edit Item Kebutuhan" : "Tambah Kebutuhan Baru"}
             </h2>
           </div>
           {editing && (
-            <span className="rounded-full bg-peach px-3 py-0.5 text-xs font-bold text-ink">
+            <span className="rounded-md bg-[#f6dbe2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-ink">
               Mode Edit
             </span>
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-12">
+        <div className="needs-form-fields grid max-w-4xl grid-cols-1 gap-5 sm:grid-cols-12 sm:gap-6">
           {/* Nama Kebutuhan */}
           <div className="sm:col-span-5">
             <label className="block text-xs font-bold uppercase tracking-wider text-ink/75 mb-1">
@@ -248,7 +244,7 @@ export default function NeedsPage() {
               onChange={(e) => setName(e.target.value)}
               placeholder="Contoh: Beras Premium 5kg / Sabun Cuci"
               required
-              className="field"
+              className="field needs-field"
             />
           </div>
 
@@ -262,7 +258,7 @@ export default function NeedsPage() {
               onChange={(e) => setAmount(e.target.value)}
               type="number"
               placeholder="Contoh: 75000"
-              className="field"
+              className="field needs-field"
             />
           </div>
 
@@ -271,17 +267,13 @@ export default function NeedsPage() {
             <label className="block text-xs font-bold uppercase tracking-wider text-ink/75 mb-1">
               Kategori Kebutuhan
             </label>
-            <select
+            <input
               value={division}
               onChange={(e) => setDivision(e.target.value)}
-              className="field capitalize"
-            >
-              {DIVISIONS.map((d) => (
-                <option key={d.key} value={d.key}>
-                  {d.icon} {d.label}
-                </option>
-              ))}
-            </select>
+              placeholder="Contoh: Dapur"
+              required
+              className="field needs-field"
+            />
           </div>
 
           {/* URL Form Input */}
@@ -295,17 +287,19 @@ export default function NeedsPage() {
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://tokopedia.link/... atau supermarket online"
                 type="url"
-                className="field pl-9"
+                className="field needs-field pl-9"
               />
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink/40">🔗</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-ink/40">
+                 <FontAwesomeIcon icon={faLink} className="text-xs" />
+               </span>
             </div>
           </div>
         </div>
 
-        <div className="mt-4 flex items-center gap-2.5 pt-2">
+        <div className="mt-2 flex flex-col items-stretch gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:items-center">
           <button disabled={loading} className="btn btn-primary text-xs sm:text-sm">
-            <span>{loading ? "Menyimpan..." : editing ? "Simpan Perubahan" : "+ Tambah Kebutuhan"}</span>
-            <span>→</span>
+<FontAwesomeIcon icon={loading ? faArrowsRotate : editing ? faCheck : faPlus} className={loading ? "animate-spin" : ""} />
+             <span>{loading ? "Menyimpan..." : editing ? "Simpan perubahan" : "Tambah kebutuhan"}</span>
           </button>
           {editing && (
             <button type="button" onClick={reset} className="btn btn-ghost text-xs sm:text-sm">
@@ -316,10 +310,10 @@ export default function NeedsPage() {
       </form>
 
       {/* ═══ TERSISA (IN-STOCK) SECTION ═══ */}
-      <section className="space-y-3">
+      <section className="needs-section space-y-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="h-3 w-3 rounded-full bg-sage" />
+            <span className="needs-section-marker bg-[#c2d772]" />
             <h2 className="font-display text-lg font-bold text-[#242f1b]">
               Stok Tersedia (Siap Pakai)
             </h2>
@@ -327,9 +321,9 @@ export default function NeedsPage() {
           <span className="text-xs font-bold text-ink/60">{tersisa.length} Item</span>
         </div>
 
-        <div className="space-y-2.5">
+        <div className="space-y-4">
           {tersisa.length === 0 && (
-            <div className="card bg-paper/70 border-dashed border-2 border-ink/20 p-8 text-center text-sm font-semibold text-ink/60">
+            <div className="needs-empty bg-[#f6ffd3]/45 p-10 text-center text-sm font-semibold text-ink/60">
               Semua stok kebutuhan habis atau belum ada item tercatat.
             </div>
           )}
@@ -341,10 +335,10 @@ export default function NeedsPage() {
 
       {/* ═══ HABIS (OUT-OF-STOCK) SECTION ═══ */}
       {habis.length > 0 && (
-        <section className="space-y-3 pt-4 border-t border-ink/10">
+        <section className="needs-section space-y-5 border-t border-ink/10 pt-8">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="h-3 w-3 rounded-full bg-coral" />
+              <span className="needs-section-marker bg-[#f6c5c1]" />
               <h2 className="font-display text-lg font-bold text-[#c44f45]">
                 Stok Habis (Perlu Dibeli)
               </h2>
@@ -352,7 +346,7 @@ export default function NeedsPage() {
             <span className="text-xs font-bold text-coral">{habis.length} Item</span>
           </div>
 
-          <div className="space-y-2.5">
+          <div className="space-y-4">
             {habis.map((n) => (
               <NeedRow key={n._id} n={n} isHabis={true} />
             ))}

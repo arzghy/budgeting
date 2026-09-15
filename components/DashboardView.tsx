@@ -9,9 +9,6 @@ import {
   faBoxOpen,
   faPen,
   faLightbulb,
-  faShieldHalved,
-  faStar,
-  faCartShopping,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -40,12 +37,13 @@ interface DashboardViewProps {
     division: string;
     status: string;
   }>;
-  savings: Array<{
-    _id: string;
-    type: string;
-    name: string;
-    amount: number;
-  }>;
+   savings: Array<{
+     _id: string;
+     type: string;
+     name: string;
+     amount: number;
+     createdAt?: string | Date;
+   }>;
   wishlists: Array<{
     _id: string;
     name: string;
@@ -149,26 +147,13 @@ export default function DashboardView({
     { label: "Lainnya", value: expenseByCategory["Lainnya"], color: "#81b29a" },
   ];
 
-  // If real total is 0, provide illustrative sample allocation for clean UI demonstration
-  const isAllZero = donutCategories.every((c) => c.value === 0);
-  const effectiveDonutData = isAllZero
-    ? [
-        { label: "Make Up", value: 350000, color: "#f6dbe2" },
-        { label: "Skin Care", value: 450000, color: "#f6c5c1" },
-        { label: "Jajan", value: 300000, color: "#e07a5f" },
-        { label: "Pakaian", value: 600000, color: "#d4a373" },
-        { label: "Kebutuhan", value: 500000, color: "#c2d772" },
-        { label: "Lainnya", value: 200000, color: "#81b29a" },
-      ]
-    : donutCategories;
-
-  const totalDonutValue = effectiveDonutData.reduce((s, c) => s + c.value, 0);
+  const totalDonutValue = donutCategories.reduce((s, c) => s + c.value, 0);
 
   // SVG Donut slice calculation (circumference = 2 * PI * 40 = 251.32)
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
   let accumulatedPercent = 0;
-  const donutSlices = effectiveDonutData.map((cat, idx) => {
+  const donutSlices = donutCategories.map((cat, idx) => {
     const percent = totalDonutValue > 0 ? (cat.value / totalDonutValue) : 0;
     const strokeDasharray = `${percent * circumference} ${circumference}`;
     const strokeDashoffset = -accumulatedPercent * circumference;
@@ -182,29 +167,46 @@ export default function DashboardView({
     };
   });
 
-  // Dual Bar comparison data (6 Months trend)
-  const barChartData = [
-    { month: "Apr", expense: 1200000, saving: 800000 },
-    { month: "Mei", expense: 1450000, saving: 950000 },
-    { month: "Jun", expense: 1100000, saving: 1200000 },
-    { month: "Jul", expense: 1650000, saving: 700000 },
-    { month: "Agt", expense: 1300000, saving: 1400000 },
-    { month: "Sep", expense: totalExpense > 0 ? totalExpense : 1250000, saving: totalSaved > 0 ? totalSaved : 1500000 },
-  ];
+  const monthFormatter = new Intl.DateTimeFormat("id-ID", { month: "short" });
+  const chartMonths = Array.from({ length: 6 }, (_, index) => {
+    const date = new Date();
+    date.setDate(1);
+    date.setMonth(date.getMonth() - (5 - index));
+    return { year: date.getFullYear(), month: date.getMonth(), label: monthFormatter.format(date).replace(".", "") };
+  });
+  const barChartData = chartMonths.map(({ year, month, label }) => ({
+    month: label,
+    expense: expenses.reduce((sum, item) => {
+      const date = new Date(item.date);
+      return date.getFullYear() === year && date.getMonth() === month ? sum + (item.amount || 0) : sum;
+    }, 0),
+    saving: savings.reduce((sum, item) => {
+      const date = new Date(item.createdAt || "");
+      return date.getFullYear() === year && date.getMonth() === month ? sum + (item.amount || 0) : sum;
+    }, 0),
+  }));
 
-  const maxBarValue = Math.max(...barChartData.map((d) => Math.max(d.expense, d.saving))) * 1.15;
+  const maxChartValue = Math.max(...barChartData.flatMap((d) => [d.expense, d.saving]), 1);
+  const maxBarValue = maxChartValue * 1.15;
+  const lineChartMax = maxChartValue * 1.1;
+  const lineChartPoints = (key: "expense" | "saving") =>
+    barChartData
+      .map((item, index) => `${index * 100 + 20},${190 - (item[key] / lineChartMax) * 160}`)
+      .join(" ");
 
   // Monthly Budget limit calculation
   const budgetSpentPercent = Math.min(100, Math.round((totalExpense / monthlyBudgetLimit) * 100));
   const wishlistPercent = totalWishlistTarget > 0 ? Math.min(100, Math.round((totalWishlistSaved / totalWishlistTarget) * 100)) : 0;
   const needsHealthyPercent = needsTotal > 0 ? Math.round(((needsTotal - needsHabis) / needsTotal) * 100) : 100;
+  const emergencySavings = savings.filter((s) => s.type === "jagajaga").reduce((sum, s) => sum + s.amount, 0);
+  const emergencySharePercent = totalSaved > 0 ? Math.round((emergencySavings / totalSaved) * 100) : 0;
 
   const initialLetters = getInitials(profileName || userName || "Faza Izzaturrafi");
 
   return (
-    <div className="space-y-6 sm:space-y-8">
+    <div className="dashboard-page space-y-7 sm:space-y-9">
       {/* ═══ TOP GREETING CARD (FETCHED PROFILE PHOTO + FONTAWESOME) ═══ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-3xl border-2 border-ink/15 bg-white/90 p-5 sm:p-7 shadow-sticker backdrop-blur-md">
+      <div className="dashboard-hero flex flex-col sm:flex-row sm:items-center justify-between gap-5 rounded-[1.75rem] p-5 sm:p-7">
         <div className="flex items-center gap-4 sm:gap-5 min-w-0 flex-1">
           {/* Fetched Profile Photo / Uppercase Initial Avatar */}
           <Link
@@ -212,7 +214,7 @@ export default function DashboardView({
             className="relative group shrink-0"
             title="Klik untuk Edit Profil"
           >
-            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-3xl border-3 border-ink bg-gradient-to-br from-cream via-blush to-sage overflow-hidden flex items-center justify-center shadow-[0_5px_0_rgba(31,43,24,0.18)] group-hover:scale-105 transition">
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-[1.25rem] border border-ink/15 bg-cream overflow-hidden flex items-center justify-center shadow-[0_8px_24px_rgba(76,91,46,0.12)] group-hover:scale-105 transition">
               {profileImage ? (
                 <img
                   src={profileImage}
@@ -220,7 +222,7 @@ export default function DashboardView({
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <div className="h-full w-full bg-gradient-to-br from-sage via-[#c2d772] to-pistachio flex items-center justify-center font-display font-black text-ink select-none text-2xl sm:text-3xl">
+                <div className="h-full w-full bg-sage flex items-center justify-center font-display font-black text-ink select-none text-2xl sm:text-3xl">
                   {initialLetters}
                 </div>
               )}
@@ -232,11 +234,11 @@ export default function DashboardView({
 
           {/* User Greeting Text */}
           <div className="min-w-0 flex-1">
-            <div className="inline-flex items-center gap-2 rounded-full bg-sage/30 px-3 py-0.5 text-[11px] font-bold text-ink">
-              <span className="h-2 w-2 rounded-full bg-sage animate-ping" />
+            <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-sage-deep">
+              <span className="h-1.5 w-1.5 rounded-full bg-sage-deep" />
               <span>Sanctuary Aktif · Keuangan Terkendali</span>
             </div>
-            <h1 className="font-display mt-1 text-2xl sm:text-3xl font-extrabold text-[#1f2b18] truncate">
+            <h1 className="font-display mt-2 text-2xl sm:text-3xl font-extrabold tracking-[-0.045em] text-ink truncate">
               Halo, {profileName || userName || "Teman Paus"}!
             </h1>
             <p className="text-xs sm:text-sm font-semibold text-ink/80 truncate mt-0.5">
@@ -255,12 +257,12 @@ export default function DashboardView({
       </div>
 
       {/* ═══ 4 KEY METRIC CARDS (FONTAWESOME ICONS + HIGH CONTRAST) ═══ */}
-      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <div className="dashboard-metrics grid grid-cols-2 gap-px overflow-hidden rounded-[1.35rem] sm:grid-cols-4">
         {/* Metric 1: Total Pengeluaran */}
-        <div className="card bg-blush/85 border-2 border-ink p-4 sm:p-5 transition hover:-translate-y-1">
+        <div className="dashboard-metric bg-blush/80 p-4 sm:p-5 transition hover:bg-blush">
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-ink/85">Pengeluaran</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-xs text-coral font-bold shadow-sm">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/60 text-xs text-coral font-bold">
               <FontAwesomeIcon icon={faMoneyBillTrendUp} />
             </span>
           </div>
@@ -274,10 +276,10 @@ export default function DashboardView({
         </div>
 
         {/* Metric 2: Total Tabungan */}
-        <div className="card bg-sage/85 border-2 border-ink p-4 sm:p-5 transition hover:-translate-y-1">
+        <div className="dashboard-metric bg-sage/80 p-4 sm:p-5 transition hover:bg-sage">
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-ink/85">Total Tabungan</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-xs text-sage-deep font-bold shadow-sm">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/60 text-xs text-sage-deep font-bold">
               <FontAwesomeIcon icon={faPiggyBank} />
             </span>
           </div>
@@ -291,10 +293,10 @@ export default function DashboardView({
         </div>
 
         {/* Metric 3: Wishlist Reached */}
-        <div className="card bg-peach/85 border-2 border-ink p-4 sm:p-5 transition hover:-translate-y-1">
+        <div className="dashboard-metric bg-peach/80 p-4 sm:p-5 transition hover:bg-peach">
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-ink/85">Wishlist</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-xs text-amber-600 font-bold shadow-sm">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/60 text-xs text-amber-600 font-bold">
               <FontAwesomeIcon icon={faGift} />
             </span>
           </div>
@@ -307,10 +309,10 @@ export default function DashboardView({
         </div>
 
         {/* Metric 4: Kebutuhan Pokok */}
-        <div className="card bg-cream/95 border-2 border-ink p-4 sm:p-5 transition hover:-translate-y-1">
+        <div className="dashboard-metric bg-cream p-4 sm:p-5 transition hover:bg-[#f6ffd3]">
           <div className="flex items-center justify-between">
             <span className="text-xs font-extrabold uppercase tracking-wider text-ink/85">Kebutuhan Pokok</span>
-            <span className="grid h-7 w-7 place-items-center rounded-full bg-white/90 text-xs text-amber-700 font-bold shadow-sm">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-white/60 text-xs text-amber-700 font-bold">
               <FontAwesomeIcon icon={faBoxOpen} />
             </span>
           </div>
@@ -326,7 +328,7 @@ export default function DashboardView({
       {/* ═══ CHARTS SUITE: DUAL BAR TREND & SVG DONUT CHART ═══ */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* Dual-Bar Comparison Trend Chart (7 cols) */}
-        <div className="card bg-paper p-5 sm:p-7 lg:col-span-7 space-y-4 border-2 border-ink shadow-sticker">
+        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-7 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-ink/10 pb-4">
             <div>
               <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Grafik Batang Komparasi</span>
@@ -368,12 +370,12 @@ export default function DashboardView({
                     <div className="flex items-end gap-1 sm:gap-2 w-full justify-center h-full">
                       {/* Expense Bar */}
                       <div
-                        className="w-3 sm:w-5 rounded-t-lg bg-gradient-to-t from-[#e9a49f] to-[#f6c5c1] border-2 border-ink transition-all duration-300 group-hover:brightness-105"
+                        className="w-3 sm:w-5 rounded-t-lg bg-[#f6c5c1] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
                         style={{ height: `${expenseHeight}%` }}
                       />
                       {/* Saving Bar */}
                       <div
-                        className="w-3 sm:w-5 rounded-t-lg bg-gradient-to-t from-[#a8c962] to-[#c2d772] border-2 border-ink transition-all duration-300 group-hover:brightness-105"
+                        className="w-3 sm:w-5 rounded-t-lg bg-[#c2d772] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
                         style={{ height: `${savingHeight}%` }}
                       />
                     </div>
@@ -386,7 +388,7 @@ export default function DashboardView({
         </div>
 
         {/* SVG Interactive Donut Chart (5 cols) */}
-        <div className="card bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 border-2 border-ink shadow-sticker flex flex-col justify-between">
+        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 flex flex-col justify-between">
           <div className="border-b border-ink/10 pb-3">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Grafik Donut Alokasi</span>
             <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
@@ -446,7 +448,7 @@ export default function DashboardView({
                   <span className="font-display text-sm sm:text-base font-extrabold text-[#1f2b18] leading-tight">
                     {formatRp(totalDonutValue)}
                   </span>
-                  <span className="text-[10px] font-bold text-ink/65">100% Terpetakan</span>
+                  <span className="text-[10px] font-bold text-ink/65">{totalDonutValue > 0 ? "100% Terpetakan" : "Belum ada data"}</span>
                 </>
               )}
             </div>
@@ -474,10 +476,46 @@ export default function DashboardView({
         </div>
       </div>
 
+      <section className="dashboard-panel bg-paper p-5 sm:p-7" aria-labelledby="cash-flow-title">
+        <div className="flex flex-col gap-3 border-b border-ink/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-ink/60">Arus enam bulan</span>
+            <h2 id="cash-flow-title" className="font-display mt-1 text-lg font-bold tracking-[-0.025em] text-ink sm:text-xl">
+              Pengeluaran dan tabungan
+            </h2>
+          </div>
+          <div className="flex items-center gap-4 text-xs font-semibold text-ink/70">
+            <span className="flex items-center gap-2"><span className="dashboard-line-key bg-[#c44f45]" />Keluar</span>
+            <span className="flex items-center gap-2"><span className="dashboard-line-key bg-sage-deep" />Nabung</span>
+          </div>
+        </div>
+        <div className="mt-5 overflow-x-auto">
+          <svg viewBox="0 0 620 220" className="h-auto min-w-[540px] w-full" role="img" aria-label="Grafik garis pengeluaran dan tabungan selama enam bulan">
+            {[30, 70, 110, 150, 190].map((y) => (
+              <line key={y} x1="20" x2="520" y1={y} y2={y} stroke="currentColor" strokeOpacity="0.1" />
+            ))}
+            <polyline points={lineChartPoints("expense")} fill="none" stroke="#c44f45" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            <polyline points={lineChartPoints("saving")} fill="none" stroke="#8a9e42" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+            {barChartData.map((item, index) => {
+              const x = index * 100 + 20;
+              const expenseY = 190 - (item.expense / lineChartMax) * 160;
+              const savingY = 190 - (item.saving / lineChartMax) * 160;
+              return (
+                <g key={item.month}>
+                  <circle cx={x} cy={expenseY} r="4" fill="#c44f45" stroke="#fffef9" strokeWidth="2" />
+                  <circle cx={x} cy={savingY} r="4" fill="#8a9e42" stroke="#fffef9" strokeWidth="2" />
+                  <text x={x} y="215" textAnchor="middle" fill="currentColor" fillOpacity="0.65" fontSize="11" fontWeight="700">{item.month}</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </section>
+
       {/* ═══ PROGRESS BARS SUITE & RECENT ACTIVITIES ═══ */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* 4 Multi-Progress Bars (7 cols) */}
-        <div className="card bg-paper p-5 sm:p-7 lg:col-span-7 space-y-5 border-2 border-ink shadow-sticker">
+        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-7 space-y-5">
           <div className="border-b border-ink/10 pb-3">
             <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Indikator Milestone</span>
             <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
@@ -490,14 +528,14 @@ export default function DashboardView({
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-ink flex items-center gap-2">
-                  <FontAwesomeIcon icon={faStar} className="text-amber-500 text-xs" />
-                  <span>Tabungan Target Wishlist</span>
+<span className="dashboard-progress-mark bg-sage-deep" aria-hidden="true" />
+                   <span>Tabungan Target Wishlist</span>
                 </span>
-                <span className="text-sage-deep font-extrabold">{wishlistPercent}% ({formatRp(totalWishlistSaved)} / {formatRp(totalWishlistTarget || 1000000)})</span>
+                <span className="text-sage-deep font-extrabold">{totalWishlistTarget > 0 ? `${wishlistPercent}% (${formatRp(totalWishlistSaved)} / ${formatRp(totalWishlistTarget)})` : "Belum ada target"}</span>
               </div>
               <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-ink bg-cream">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-sage to-pistachioDeep transition-all duration-500"
+                  className="h-full rounded-full bg-sage-deep transition-all duration-500"
                   style={{ width: `${Math.max(4, wishlistPercent)}%` }}
                 />
               </div>
@@ -507,14 +545,14 @@ export default function DashboardView({
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-ink flex items-center gap-2">
-                  <FontAwesomeIcon icon={faShieldHalved} className="text-[#c44f45] text-xs" />
-                  <span>Batas Budget Pengeluaran Bulanan</span>
+<span className="dashboard-progress-mark bg-[#c44f45]" aria-hidden="true" />
+                   <span>Batas Budget Pengeluaran Bulanan</span>
                 </span>
                 <span className="text-[#c44f45] font-extrabold">{budgetSpentPercent}% ({formatRp(totalExpense)} / {formatRp(monthlyBudgetLimit)})</span>
               </div>
               <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-ink bg-cream">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-peach via-coral to-[#c44f45] transition-all duration-500"
+                  className="h-full rounded-full bg-[#c44f45] transition-all duration-500"
                   style={{ width: `${Math.max(4, budgetSpentPercent)}%` }}
                 />
               </div>
@@ -524,14 +562,14 @@ export default function DashboardView({
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-ink flex items-center gap-2">
-                  <FontAwesomeIcon icon={faCartShopping} className="text-sage-deep text-xs" />
-                  <span>Ketersediaan Stok Kebutuhan Pokok</span>
+<span className="dashboard-progress-mark bg-[#81b29a]" aria-hidden="true" />
+                   <span>Ketersediaan Stok Kebutuhan Pokok</span>
                 </span>
                 <span className="text-sage-deep font-extrabold">{needsHealthyPercent}% Tersedia</span>
               </div>
               <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-ink bg-cream">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#c2d772] to-[#81b29a] transition-all duration-500"
+                  className="h-full rounded-full bg-[#81b29a] transition-all duration-500"
                   style={{ width: `${Math.max(4, needsHealthyPercent)}%` }}
                 />
               </div>
@@ -541,15 +579,15 @@ export default function DashboardView({
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold">
                 <span className="text-ink flex items-center gap-2">
-                  <FontAwesomeIcon icon={faPiggyBank} className="text-[#3d5a80] text-xs" />
-                  <span>Pilar Dana Darurat (Jaga-Jaga)</span>
+<span className="dashboard-progress-mark bg-[#3d5a80]" aria-hidden="true" />
+                   <span>Pilar Dana Darurat (Jaga-Jaga)</span>
                 </span>
-                <span className="text-[#3d5a80] font-extrabold">{formatRp(savings.filter(s => s.type === "jagajaga").reduce((sum, s) => sum + s.amount, 0))} Terkumpul</span>
+                <span className="text-[#3d5a80] font-extrabold">{formatRp(emergencySavings)} · {emergencySharePercent}% dari tabungan</span>
               </div>
-              <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-ink bg-cream">
+              <div className="h-3.5 w-full overflow-hidden rounded-full border border-ink/15 bg-cream">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-[#81b29a] to-[#3d5a80] transition-all duration-500"
-                  style={{ width: `${Math.min(100, Math.max(6, (savings.filter(s => s.type === "jagajaga").reduce((sum, s) => sum + s.amount, 0) / 2000000) * 100))}%` }}
+                  className="h-full rounded-full bg-[#81b29a] transition-all duration-500"
+                  style={{ width: `${emergencySharePercent}%` }}
                 />
               </div>
             </div>
@@ -557,7 +595,7 @@ export default function DashboardView({
         </div>
 
         {/* Recent Transactions & Financial Tip (5 cols) */}
-        <div className="card bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 border-2 border-ink shadow-sticker flex flex-col justify-between">
+        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between border-b border-ink/10 pb-3">
               <div>

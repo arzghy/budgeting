@@ -1,7 +1,7 @@
-# Graph Report - budgeting  (2026-09-14)
+# Graph Report - budgeting  (2026-09-13)
 
 ## Corpus Check
-- 242 files · ~558,062 words
+- 242 files · ~558,179 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary

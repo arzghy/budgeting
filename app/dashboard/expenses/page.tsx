@@ -204,43 +204,43 @@ export default function ExpensesPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="expenses-page space-y-10 sm:space-y-12">
       {/* ═══ HEADER & METRICS ═══ */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <div className="inline-flex items-center gap-2 rounded-full border border-ink/15 bg-white/90 px-3.5 py-1 text-xs font-bold text-ink shadow-sm">
+          <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-sage-deep">
             <FontAwesomeIcon icon={faWallet} className="text-sage-deep" />
             <span>Buku Kas Pengeluaran</span>
           </div>
-          <h1 className="font-display mt-2 text-2xl sm:text-3xl font-extrabold text-[#1f2b18]">
+          <h1 className="font-display mt-2 text-3xl font-extrabold tracking-[-0.045em] text-ink sm:text-4xl">
             Catatan Pengeluaran
           </h1>
-          <p className="text-xs sm:text-sm font-semibold text-ink/80">
-            Kelola pagu maksimal bulanan dan pantau pos belanja make up, skin care, jajan, dan pakaian.
+          <p className="mt-3 max-w-[42rem] text-xs font-semibold leading-6 text-ink/70 sm:text-sm">
+            Tetapkan batas bulanan lalu pantau belanja make up, skin care, jajan, dan pakaian.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
-          <div className="rounded-2xl border-2 border-ink bg-blush/80 px-4 py-2.5 text-center shadow-sticker">
-            <span className="block text-[10px] font-extrabold uppercase tracking-wider text-ink/75">Total Pengeluaran</span>
-            <span className="font-display text-lg font-extrabold text-[#c44f45]">{formatRp(total)}</span>
-          </div>
-          <div className="rounded-2xl border-2 border-ink bg-white px-4 py-2.5 text-center shadow-sticker">
-            <span className="block text-[10px] font-extrabold uppercase tracking-wider text-ink/75">Jumlah Transaksi</span>
-            <span className="font-display text-lg font-extrabold text-ink">{list.length} Catatan</span>
-          </div>
-        </div>
+<div className="grid grid-cols-2 gap-px overflow-hidden rounded-xl bg-ink/10 sm:min-w-[18rem]">
+           <div className="bg-[#f6dbe2] px-4 py-3 text-left">
+             <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Total keluar</span>
+             <span className="font-display mt-1 block text-base font-extrabold text-[#c44f45]">{formatRp(total)}</span>
+           </div>
+           <div className="bg-[#f6ffd3] px-4 py-3 text-left">
+             <span className="block text-[10px] font-bold uppercase tracking-[0.14em] text-ink/60">Transaksi</span>
+             <span className="font-display mt-1 block text-base font-extrabold text-ink">{list.length} catatan</span>
+           </div>
+         </div>
       </div>
 
       {/* ═══ GATEKEEPER 1: SET MAKSIMAL PENGELUARAN 1 BULAN (JIKA BELUM DISET) ═══ */}
       {monthlyLimit <= 0 || isEditingBudget ? (
         <form
           onSubmit={handleSetMonthlyBudget}
-          className="card bg-paper p-5 sm:p-7 space-y-4 border-3 border-ink shadow-[0_8px_0_rgba(31,43,24,0.2)] animate-in fade-in duration-300"
+          className="expense-panel bg-[#f6ffd3] p-6 sm:p-9 space-y-7 animate-in fade-in duration-300"
         >
-          <div className="flex items-center justify-between border-b border-ink/10 pb-3">
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-peach text-sm text-ink shadow-sm">
+           <div className="flex items-center justify-between border-b border-ink/10 pb-5">
+             <div className="flex items-center gap-3">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#f6c5c1] text-sm text-ink">
                 <FontAwesomeIcon icon={faBullseye} />
               </span>
               <div>
@@ -249,7 +249,7 @@ export default function ExpensesPage() {
                 </h2>
                 <p className="text-xs font-semibold text-ink/80">
                   {monthlyLimit > 0
-                    ? "Perbarui target pagu anggaran pengeluaran bulananmu."
+                    ? "Perbarui batas bulanan pengeluaranmu."
                     : "Sebelum mencatat pengeluaran, tentukan batas maksimal anggaran 1 bulan terlebih dahulu."}
                 </p>
               </div>
@@ -265,7 +265,7 @@ export default function ExpensesPage() {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end pt-2">
+          <div className="grid grid-cols-1 gap-5 pt-2 sm:grid-cols-12 sm:gap-6 sm:items-end">
             <div className="sm:col-span-8">
               <label className="block text-xs font-extrabold uppercase tracking-wider text-ink/85 mb-1.5">
                 Nominal Batas Maksimal Bulanan (Rp) *
@@ -286,37 +286,24 @@ export default function ExpensesPage() {
                 className="btn btn-primary w-full text-xs sm:text-sm py-3 flex items-center justify-center gap-2"
               >
                 <FontAwesomeIcon icon={faLock} className="text-xs" />
-                <span>{savingBudget ? "Menyimpan..." : "Kunci & Tetapkan Pagu →"}</span>
+                <span>{savingBudget ? "Menyimpan..." : "Simpan Batas Bulanan →"}</span>
               </button>
             </div>
           </div>
 
-          {/* Quick suggestions */}
-          <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-            <span className="font-bold text-ink/75">Pilihan Cepat:</span>
-            {[1500000, 2500000, 3000000, 5000000, 10000000].map((val) => (
-              <button
-                key={val}
-                type="button"
-                onClick={() => setBudgetInput(String(val))}
-                className="rounded-full border border-ink/20 bg-cream/80 px-3 py-1 text-xs font-bold text-ink hover:bg-white transition"
-              >
-                {formatRp(val)}
-              </button>
-            ))}
-          </div>
+
         </form>
       ) : (
         /* ═══ LIVE BUDGET MONITOR CARD (JIKA SUDAH DISET) ═══ */
-        <div className="card bg-paper p-5 sm:p-6 border-2 border-ink shadow-sticker space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-ink/10 pb-3">
+        <div className="expense-panel bg-[#fffef9] p-6 sm:p-8 space-y-6">
+          <div className="flex flex-col gap-5 border-b border-ink/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-xl bg-sage text-sm text-ink">
+              <span className="grid h-8 w-8 place-items-center rounded-lg bg-[#c2d772] text-sm text-ink">
                 <FontAwesomeIcon icon={faShieldHalved} />
               </span>
               <div>
                 <span className="text-[10px] font-extrabold uppercase tracking-wider text-ink/70 block">
-                  Pagu Maksimal Bulanan
+                  Batas Bulanan
                 </span>
                 <h3 className="font-display text-lg font-bold text-[#1f2b18]">
                   {formatRp(monthlyLimit)}
@@ -336,7 +323,7 @@ export default function ExpensesPage() {
                 className="rounded-full border border-ink/20 bg-white px-3.5 py-1.5 text-xs font-bold text-ink shadow-sm hover:bg-cream transition flex items-center gap-1.5"
               >
                 <FontAwesomeIcon icon={faPenToSquare} className="text-xs text-ink/70" />
-                <span>Ubah Pagu</span>
+                <span>Ubah Batas</span>
               </button>
             </div>
           </div>
@@ -352,26 +339,22 @@ export default function ExpensesPage() {
               </span>
             </div>
 
-            <div className="h-3.5 w-full overflow-hidden rounded-full border-2 border-ink bg-cream">
-              <div
-                className={`h-full rounded-full transition-all duration-500 ${
-                  percentUsed >= 85
-                    ? "bg-gradient-to-r from-peach via-coral to-[#c44f45]"
-                    : "bg-gradient-to-r from-sage to-pistachioDeep"
-                }`}
-                style={{ width: `${Math.max(3, percentUsed)}%` }}
-              />
-            </div>
+<div className="h-2 w-full overflow-hidden rounded-full bg-[#f6dbe2]">
+               <div
+                 className={`h-full rounded-full transition-all duration-500 ${percentUsed >= 85 ? "bg-[#c44f45]" : "bg-[#8a9e42]"}`}
+                 style={{ width: `${percentUsed}%` }}
+               />
+             </div>
           </div>
         </div>
       )}
 
       {/* ═══ FORM INPUT PENGELUARAN ═══ */}
       {monthlyLimit > 0 && (
-        <form onSubmit={submitExpense} className="card bg-paper p-5 sm:p-7 space-y-4 border-2 border-ink shadow-sticker">
-          <div className="flex items-center justify-between border-b border-ink/10 pb-3">
+<form onSubmit={submitExpense} className="expense-panel bg-[#fffef9] p-6 sm:p-9 space-y-7">
+           <div className="flex items-center justify-between border-b border-ink/10 pb-5">
             <div className="flex items-center gap-2">
-              <span className="grid h-7 w-7 place-items-center rounded-xl bg-sage font-bold text-xs text-ink">
+              <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#f6c5c1] font-bold text-xs text-ink">
                 <FontAwesomeIcon icon={editing ? faPenToSquare : faPlus} />
               </span>
               <h2 className="font-display text-base sm:text-lg font-bold text-[#1f2b18]">
@@ -379,13 +362,13 @@ export default function ExpensesPage() {
               </h2>
             </div>
             {editing && (
-              <span className="rounded-full bg-peach px-3 py-0.5 text-xs font-bold text-ink">
+              <span className="rounded-md bg-[#f6dbe2] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-ink">
                 Mode Edit
               </span>
             )}
           </div>
 
-          <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-12">
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-12 sm:gap-6">
             {/* Judul Pengeluaran */}
             <div className="sm:col-span-5">
               <label className="block text-xs font-extrabold uppercase tracking-wider text-ink/85 mb-1">
@@ -435,7 +418,7 @@ export default function ExpensesPage() {
 
             {/* Subkategori Pakaian (Baju, Celana, Dress, Sepatu) */}
             {division === "pakaian" && (
-              <div className="sm:col-span-12 bg-cream/60 p-3.5 rounded-2xl border-2 border-ink/15 animate-in fade-in zoom-in-95 duration-200">
+              <div className="sm:col-span-12 rounded-xl border border-ink/10 bg-[#f6ffd3]/60 p-3.5 animate-in fade-in zoom-in-95 duration-200">
                 <label className="block text-xs font-extrabold uppercase tracking-wider text-ink/85 mb-2 flex items-center gap-1.5">
                   <FontAwesomeIcon icon={faShirt} className="text-sage-deep" />
                   <span>Jenis Pakaian:</span>
@@ -446,11 +429,11 @@ export default function ExpensesPage() {
                       key={sub.key}
                       type="button"
                       onClick={() => setSubcategory(sub.key)}
-                      className={`flex items-center gap-2 rounded-xl border-2 px-3.5 py-1.5 text-xs font-bold transition ${
-                        subcategory === sub.key
-                          ? "border-ink bg-sage text-ink shadow-xs scale-102 font-extrabold"
-                          : "border-ink/15 bg-white text-ink/80 hover:bg-cream hover:text-ink"
-                      }`}
+className={`flex items-center gap-2 rounded-lg border px-3.5 py-1.5 text-xs font-bold transition ${
+                         subcategory === sub.key
+                           ? "border-ink/10 bg-[#c2d772] text-ink font-extrabold"
+                           : "border-ink/10 bg-[#fffef9] text-ink/75 hover:bg-[#f6dbe2] hover:text-ink"
+                       }`}
                     >
                       <FontAwesomeIcon icon={sub.icon} className="text-xs" />
                       <span>{sub.label}</span>
@@ -480,7 +463,7 @@ export default function ExpensesPage() {
             </div>
           </div>
 
-          <div className="mt-4 flex items-center gap-2.5 pt-2">
+          <div className="mt-2 flex flex-col items-stretch gap-3 border-t border-ink/10 pt-5 sm:flex-row sm:items-center">
             <button disabled={loading} className="btn btn-primary text-xs sm:text-sm">
               <span>{loading ? "Menyimpan..." : editing ? "Simpan Perubahan" : "+ Catat Pengeluaran"}</span>
               <span>→</span>
@@ -495,15 +478,15 @@ export default function ExpensesPage() {
       )}
 
       {/* ═══ CATEGORY FILTER TABS & SEARCH ═══ */}
-      <div className="space-y-3">
-        <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+<div className="space-y-5">
+         <div className="expense-filters grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
           <button
             onClick={() => setActive("semua")}
-            className={`rounded-full px-3.5 py-1.5 text-xs font-bold border-2 transition ${
-              active === "semua"
-                ? "border-ink bg-sage text-ink shadow-sm font-extrabold"
-                : "border-ink/15 bg-white text-ink/80 hover:bg-cream"
-            }`}
+className={`w-full rounded-lg border px-3.5 py-2 text-xs font-bold transition ${
+               active === "semua"
+                 ? "border-ink/10 bg-[#c2d772] text-ink font-extrabold"
+                 : "border-ink/10 bg-[#f6ffd3] text-ink/75 hover:bg-[#f6dbe2]"
+             }`}
           >
             Semua ({list.length})
           </button>
@@ -511,11 +494,11 @@ export default function ExpensesPage() {
             <button
               key={d.key}
               onClick={() => setActive(d.key)}
-              className={`rounded-full px-3 py-1.5 text-xs font-bold border-2 transition flex items-center gap-1.5 ${
-                active === d.key
-                  ? "border-ink bg-sage text-ink shadow-sm font-extrabold"
-                  : "border-ink/15 bg-white text-ink/80 hover:bg-cream"
-              }`}
+className={`w-full rounded-lg border px-3 py-2 text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                 active === d.key
+                   ? "border-ink/10 bg-[#c2d772] text-ink font-extrabold"
+                   : "border-ink/10 bg-[#f6ffd3] text-ink/75 hover:bg-[#f6dbe2]"
+               }`}
             >
               <FontAwesomeIcon icon={d.icon} className="text-[11px]" />
               <span>{d.label}</span>
@@ -523,12 +506,12 @@ export default function ExpensesPage() {
           ))}
         </div>
 
-        <div className="relative max-w-sm">
+        <div className="relative w-full">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Cari pengeluaran atau jenis pakaian..."
-            className="field pl-9 py-2 text-xs"
+            className="field w-full pl-9 py-2 text-xs"
           />
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-ink/50">
             <FontAwesomeIcon icon={faMagnifyingGlass} />
@@ -537,9 +520,9 @@ export default function ExpensesPage() {
       </div>
 
       {/* ═══ EXPENSE LIST ═══ */}
-      <div className="space-y-3">
-        {filteredList.length === 0 && (
-          <div className="card bg-paper/70 border-dashed border-2 border-ink/20 p-10 text-center text-sm font-semibold text-ink/70">
+<div className="space-y-4">
+         {filteredList.length === 0 && (
+          <div className="expense-empty bg-[#f6ffd3]/55 p-10 text-center text-sm font-semibold text-ink/70">
             <FontAwesomeIcon icon={faWallet} className="text-3xl block mb-2 text-ink/40" />
             Belum ada catatan pengeluaran di kategori ini.
           </div>
@@ -552,10 +535,10 @@ export default function ExpensesPage() {
           return (
             <div
               key={e._id}
-              className="card bg-paper p-4 sm:p-5 transition hover:-translate-y-0.5 hover:shadow-sticker flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-2 border-ink/15"
+              className="expense-row flex flex-col gap-4 bg-[#fffef9] p-4 transition sm:flex-row sm:items-center sm:justify-between sm:p-5"
             >
               <div className="flex items-start sm:items-center gap-3.5 min-w-0 flex-1">
-                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-cream border border-ink/15 text-sm text-ink shadow-sm">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[#f6ffd3] border border-ink/10 text-sm text-ink">
                   <FontAwesomeIcon icon={subInfo ? subInfo.icon : divInfo.icon} />
                 </span>
                 <div className="min-w-0 flex-1">
@@ -570,9 +553,9 @@ export default function ExpensesPage() {
                       </span>
                     )}
                     {e.source && e.source !== "manual" && (
-                      <span className="rounded-full bg-sage/40 px-2 py-0.5 text-[9px] font-bold text-ink">
-                        ⚡ Otomatis ({e.source})
-                      </span>
+<span className="rounded-md bg-[#c2d772]/60 px-2 py-1 text-[9px] font-bold text-ink">
+                         Otomatis ({e.source})
+                       </span>
                     )}
                   </div>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
@@ -610,14 +593,14 @@ export default function ExpensesPage() {
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => startEdit(e)}
-                    className="rounded-full border border-ink/20 bg-white px-3 py-1 text-xs font-bold text-ink transition hover:bg-cream flex items-center gap-1"
+                    className="rounded-lg border border-ink/15 bg-[#f6ffd3] px-3 py-1.5 text-xs font-bold text-ink transition hover:bg-[#c2d772] flex items-center gap-1"
                   >
                     <FontAwesomeIcon icon={faPenToSquare} className="text-[10px]" />
                     <span>Edit</span>
                   </button>
                   <button
                     onClick={() => remove(e._id)}
-                    className="rounded-full border border-ink/20 bg-[#fde8e7] px-3 py-1 text-xs font-bold text-[#c44f45] transition hover:bg-[#fbd0ce] flex items-center gap-1"
+                    className="rounded-lg border border-ink/10 bg-[#f6dbe2] px-3 py-1.5 text-xs font-bold text-[#c44f45] transition hover:bg-[#f6c5c1] flex items-center gap-1"
                   >
                     <FontAwesomeIcon icon={faTrashCan} className="text-[10px]" />
                     <span>Hapus</span>
