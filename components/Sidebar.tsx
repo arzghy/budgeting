@@ -19,11 +19,11 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const menuItems = [
-  { href: "/dashboard", label: "Beranda", icon: faHouse, badge: null },
-  { href: "/dashboard/expenses", label: "Pengeluaran", icon: faMoneyBillWave, badge: "Buku Kas" },
-  { href: "/dashboard/needs", label: "Kebutuhan", icon: faCartShopping, badge: "Otomatis" },
-  { href: "/dashboard/wishlist", label: "Wishlist", icon: faStar, badge: "Target" },
-  { href: "/dashboard/save", label: "Nabung", icon: faPiggyBank, badge: "Celengan" },
+  { href: "/dashboard", label: "Beranda", icon: faHouse },
+  { href: "/dashboard/expenses", label: "Pengeluaran", icon: faMoneyBillWave },
+  { href: "/dashboard/needs", label: "Kebutuhan", icon: faCartShopping },
+  { href: "/dashboard/wishlist", label: "Wishlist", icon: faStar },
+  { href: "/dashboard/save", label: "Nabung", icon: faPiggyBank },
 ];
 
 const INITIAL_NOTIFICATIONS = [
@@ -123,77 +123,31 @@ export default function Sidebar() {
   return (
     <>
       {/* ═══ MOBILE / TABLET PORTRAIT TOP NAVBAR (< 1024px) ═══ */}
-      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-ink/10 bg-[#f6c5c1] px-3 py-2.5 font-sans backdrop-blur-xl sm:px-5 lg:hidden">
-        {/* Left: Hamburger & Brand */}
+      <header className="sticky top-0 z-40 flex items-center justify-between border-b border-ink/10 bg-white px-3 py-2.5 font-sans sm:px-5 lg:hidden">
         <div className="flex items-center gap-2 sm:gap-3">
           <button
             type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="grid h-9 w-9 place-items-center rounded-xl border border-ink/15 bg-[#f6ffd3] text-sm font-bold text-ink transition hover:bg-[#f6ffd3]/80 active:scale-95 sm:h-10 sm:w-10"
+            className="grid h-9 w-9 place-items-center rounded-xl border border-ink/15 bg-[#f6ffd3] text-sm font-bold text-ink transition hover:bg-[#c2d772] active:scale-95 sm:h-10 sm:w-10"
             aria-label="Buka Menu Sidebar"
           >
             <FontAwesomeIcon icon={mobileOpen ? faXmark : faBars} className="text-base" />
           </button>
           <Link href="/dashboard" className="flex items-center gap-2">
-            <span className="grid h-9 w-9 place-items-center rounded-lg border border-ink/10 bg-[#f6ffd3] p-1">
-              <img src="/images/logo-mibudge.png" alt="MiBudge" className="h-full w-full object-contain" />
-            </span>
-            <span className="text-sm font-bold tracking-[-0.03em] text-ink sm:text-base">
-              MiBudge
-            </span>
+            <img src="/images/logo-mibudge.png" alt="MiBudge" className="h-9 w-9 object-contain sm:h-10 sm:w-10" />
+            <span className="text-sm font-bold tracking-[-0.03em] text-ink sm:text-base">MiBudge</span>
           </Link>
         </div>
 
-        {/* Right: Notifications Button, Edit Profile Link, and Sign Out */}
-        <div className="flex items-center gap-1.5 sm:gap-2">
-          {/* Mobile Notification Button */}
-          <button
-            type="button"
-            onClick={() => setNotifModalOpen(true)}
-            className="relative grid h-9 w-9 place-items-center rounded-lg border border-ink/10 bg-[#f6dbe2] text-sm text-ink transition hover:bg-[#f6dbe2]/80 active:scale-95"
-            title="Pusat Notifikasi"
-          >
-            <FontAwesomeIcon icon={faBell} />
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-coral text-[9px] font-bold text-white shadow-sm animate-pulse">
-                {unreadCount}
-              </span>
-            )}
-          </button>
-
-          {/* Mobile Edit Profile Button -> /dashboard/profile */}
-          <Link
-            href="/dashboard/profile"
-            className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-bold transition active:scale-95 sm:px-3 ${
-path === "/dashboard/profile"
-                 ? "border-ink/20 bg-[#c2d772] text-ink"
-                 : "border-ink/10 bg-[#c2d772]/80 text-ink hover:bg-[#c2d772]"
-            }`}
-            title="Edit Profil"
-          >
-            {imageUrl ? (
-              <img
-                src={imageUrl}
-                alt="Foto Profil"
-                className="h-5 w-5 rounded-full object-cover border border-ink/20"
-              />
-            ) : (
-              <span className="grid h-5 w-5 place-items-center rounded-full bg-[#f6ffd3] text-[10px] font-black text-ink">
-                {initialLetters.charAt(0)}
-              </span>
-            )}
-            <span className="hidden xs:inline">Profil</span>
-          </Link>
-
-          {/* Mobile Sign Out */}
-          <button
-            onClick={() => signOut({ callbackUrl: "/" })}
-            className="flex items-center gap-1.5 rounded-lg border border-ink/10 bg-[#f6dbe2] px-2.5 py-1.5 text-xs font-bold text-ink transition hover:bg-[#f6dbe2]/80 sm:px-3"
-          >
-            <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-[11px]" />
-            <span>Keluar</span>
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => signOut({ callbackUrl: "/" })}
+           className="grid h-9 w-9 place-items-center rounded-lg border-0 bg-transparent text-sm font-bold text-ink transition hover:bg-[#f6dbe2] active:scale-95 sm:h-10 sm:w-10"
+          aria-label="Keluar"
+          title="Keluar"
+        >
+          <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-[12px]" />
+        </button>
       </header>
 
       {/* ═══ MOBILE SLIDE-OVER BACKDROP OVERLAY ═══ */}
@@ -289,15 +243,17 @@ path === "/dashboard/profile"
       >
         {/* ── Top Header Brand ── */}
         <div>
-          <div className="flex items-center justify-between border-b-2 border-ink/10 pb-4">
+           <div className="flex w-full items-center justify-between rounded-lg bg-white px-3 py-2.5">
             <Link
               href="/dashboard"
               onClick={() => setMobileOpen(false)}
               className="flex items-center gap-3 group"
             >
-              <div className="grid h-11 w-11 place-items-center rounded-xl border border-ink/15 bg-[#f6ffd3] p-1 transition-transform group-hover:scale-105">
-                <img src="/images/logo-mibudge.png" alt="MiBudge" className="h-full w-full object-contain" />
-              </div>
+              <img
+                src="/images/logo-mibudge.png"
+                alt="MiBudge"
+                className="h-11 w-11 object-contain transition-transform group-hover:scale-105"
+              />
               <span className="text-lg font-extrabold tracking-[-0.04em] text-ink">
                 MiBudge
               </span>
@@ -318,7 +274,7 @@ path === "/dashboard/profile"
             <button
               type="button"
               onClick={() => setNotifModalOpen(true)}
-              className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-[#f6dbe2] py-2 text-xs font-bold text-ink transition hover:bg-[#f6dbe2]/80 active:scale-95"
+              className="flex-1 flex items-center justify-center gap-2 rounded-lg bg-[#f6ffd3] py-2 text-xs font-bold text-ink transition hover:bg-[#c2d772] active:scale-95"
             >
               <FontAwesomeIcon icon={faBell} className="text-xs text-ink/80" />
               <span>Notifikasi</span>
@@ -334,8 +290,8 @@ path === "/dashboard/profile"
               href="/dashboard/profile"
 className={`flex-1 flex items-center justify-center gap-2 rounded-lg py-2 text-xs font-bold transition active:scale-95 ${
                   path === "/dashboard/profile"
-                    ? "bg-[#c2d772] text-ink"
-                    : "bg-[#c2d772]/70 text-ink hover:bg-[#c2d772]"
+                      ? "bg-[#c2d772] text-ink"
+                     : "bg-[#f6dbe2] text-ink hover:bg-[#f6c5c1]"
                 }`}
             >
               <FontAwesomeIcon icon={faUserGear} className="text-xs text-ink/80" />
@@ -369,11 +325,7 @@ className={`group flex items-center justify-between rounded-lg border-l-2 px-3.5
                     <span className="font-bold">{item.label}</span>
                   </div>
 
-                  {item.badge && !isActive && (
-                    <span className="text-[10px] font-medium text-ink/50">
-                      {item.badge}
-                    </span>
-                  )}
+
                   {isActive && (
                     <span className="h-1.5 w-1.5 rounded-full bg-ink/70" aria-hidden="true" />
                   )}
@@ -436,10 +388,10 @@ className={`rounded-md px-2 py-0.5 transition ${
             {/* Keluar Button */}
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
-              className="rounded-lg border border-ink/15 bg-[#f6c5c1] px-3.5 py-1.5 text-xs font-bold text-ink transition hover:bg-[#f6ffd3] active:translate-y-0.5 flex items-center gap-1.5"
-            >
-              <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-[10px]" />
-              <span>Keluar</span>
+               className="rounded-lg border border-ink/15 bg-[#c2d772] px-3.5 py-1.5 text-xs font-bold text-ink transition hover:bg-[#f6ffd3] active:translate-y-0.5 flex items-center gap-1.5"
+             >
+               <FontAwesomeIcon icon={faArrowRightFromBracket} className="text-[10px]" />
+               <span>Keluar</span>
             </button>
           </div>
         </div>

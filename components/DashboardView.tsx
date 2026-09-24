@@ -71,6 +71,67 @@ function getInitials(name: string) {
   return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
 }
 
+type ChartPeriod = "7d" | "1m" | "6m" | "3y";
+
+const chartPeriodOptions: Array<{ value: ChartPeriod; label: string }> = [
+  { value: "7d", label: "7 hari" },
+  { value: "1m", label: "1 bulan" },
+  { value: "6m", label: "6 bulan" },
+  { value: "3y", label: "3 tahun" },
+];
+
+type ChartBucket = { start: Date; end: Date; label: string };
+
+function buildChartBuckets(period: ChartPeriod, now: Date): ChartBucket[] {
+  const startOfDay = (date: Date) => new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const addDays = (date: Date, days: number) => {
+    const next = new Date(date);
+    next.setDate(next.getDate() + days);
+    return next;
+  };
+  const startOfWeek = (date: Date) => {
+    const start = startOfDay(date);
+    start.setDate(start.getDate() - start.getDay());
+    return start;
+  };
+  const count = period === "7d" ? 7 : period === "1m" ? 4 : period === "6m" ? 6 : 3;
+  const weekdayFormatter = new Intl.DateTimeFormat("id-ID", { weekday: "long" });
+  const monthFormatter = new Intl.DateTimeFormat("id-ID", { month: "long" });
+
+  return Array.from({ length: count }, (_, index) => {
+    const offset = index - count + 1;
+    let start: Date;
+    let end: Date;
+    let label: string;
+
+    if (period === "7d") {
+      start = addDays(startOfDay(now), offset);
+      end = addDays(start, 1);
+      label = weekdayFormatter.format(start);
+    } else if (period === "1m") {
+      start = addDays(startOfWeek(now), offset * 7);
+      end = addDays(start, 7);
+      label = `Minggu ${index + 1}`;
+    } else if (period === "6m") {
+      start = new Date(now.getFullYear(), now.getMonth() + offset, 1);
+      end = new Date(start.getFullYear(), start.getMonth() + 1, 1);
+      label = monthFormatter.format(start);
+    } else {
+      start = new Date(now.getFullYear() + offset, 0, 1);
+      end = new Date(start.getFullYear() + 1, 0, 1);
+      label = String(start.getFullYear());
+    }
+
+    return { start, end, label };
+  });
+}
+
+function isInChartRange(dateValue: string | Date | undefined, start: Date, end: Date) {
+  if (!dateValue) return false;
+  const date = new Date(dateValue);
+  return date >= start && date < end;
+}
+
 export default function DashboardView({
   userName,
   expenses = [],
@@ -79,10 +140,12 @@ export default function DashboardView({
   wishlists = [],
 }: DashboardViewProps) {
   const [hoveredDonutIdx, setHoveredDonutIdx] = useState<number | null>(null);
+  const [barPeriod, setBarPeriod] = useState<ChartPeriod>("6m");
+  const [linePeriod, setLinePeriod] = useState<ChartPeriod>("6m");
+  const [donutPeriod, setDonutPeriod] = useState<ChartPeriod>("6m");
 
   // ── Profile State from MongoDB ──
   const [profileName, setProfileName] = useState(userName || "Faza");
-  const [profileMotto, setProfileMotto] = useState("Sanctuary Aktif · Keuangan Terkendali");
   const [profileImage, setProfileImage] = useState("");
   const [monthlyBudgetLimit, setMonthlyBudgetLimit] = useState<number>(3000000);
 
@@ -93,7 +156,7 @@ export default function DashboardView({
         if (res.ok) {
           const data = await res.json();
           if (data.displayName) setProfileName(data.displayName);
-          if (data.motto) setProfileMotto(data.motto);
+
           if (data.imageUrl) setProfileImage(data.imageUrl);
           if (data.monthlyBudget) setMonthlyBudgetLimit(Number(data.monthlyBudget) || 3000000);
           return;
@@ -108,7 +171,7 @@ export default function DashboardView({
         try {
           const parsed = JSON.parse(saved);
           if (parsed.displayName) setProfileName(parsed.displayName);
-          if (parsed.motto) setProfileMotto(parsed.motto);
+
           if (parsed.imageUrl) setProfileImage(parsed.imageUrl);
         } catch (e) {
           console.error(e);
@@ -128,14 +191,20 @@ export default function DashboardView({
   const needsTotal = needs.length;
   const wishlistPurchased = wishlists.filter((w) => w.purchased).length;
 
+  const now = new Date();
+  const donutBuckets = buildChartBuckets(donutPeriod, now);
+  const donutStart = donutBuckets[0].start;
+  const donutEnd = donutBuckets[donutBuckets.length - 1].end;
+  const donutExpenses = expenses.filter((expense) => isInChartRange(expense.date, donutStart, donutEnd));
+
   // Calculate breakdown for Donut Chart with updated categories
   const expenseByCategory = {
-    "Make Up": expenses.filter((e) => e.division === "makeup").reduce((s, e) => s + e.amount, 0),
-    "Skin Care": expenses.filter((e) => e.division === "skincare").reduce((s, e) => s + e.amount, 0),
-    "Jajan": expenses.filter((e) => e.division === "jajan").reduce((s, e) => s + e.amount, 0),
-    "Pakaian": expenses.filter((e) => e.division === "pakaian").reduce((s, e) => s + e.amount, 0),
-    "Kebutuhan": expenses.filter((e) => e.division === "kebutuhan").reduce((s, e) => s + e.amount, 0),
-    "Lainnya": expenses.filter((e) => e.division === "lainnya" || e.division === "transport" || e.division === "hiburan").reduce((s, e) => s + e.amount, 0),
+    "Make Up": donutExpenses.filter((e) => e.division === "makeup").reduce((s, e) => s + e.amount, 0),
+    "Skin Care": donutExpenses.filter((e) => e.division === "skincare").reduce((s, e) => s + e.amount, 0),
+    "Jajan": donutExpenses.filter((e) => e.division === "jajan").reduce((s, e) => s + e.amount, 0),
+    "Pakaian": donutExpenses.filter((e) => e.division === "pakaian").reduce((s, e) => s + e.amount, 0),
+    "Kebutuhan": donutExpenses.filter((e) => e.division === "kebutuhan").reduce((s, e) => s + e.amount, 0),
+    "Lainnya": donutExpenses.filter((e) => e.division === "lainnya" || e.division === "transport" || e.division === "hiburan").reduce((s, e) => s + e.amount, 0),
   };
 
   const donutCategories = [
@@ -167,32 +236,27 @@ export default function DashboardView({
     };
   });
 
-  const monthFormatter = new Intl.DateTimeFormat("id-ID", { month: "short" });
-  const chartMonths = Array.from({ length: 6 }, (_, index) => {
-    const date = new Date();
-    date.setDate(1);
-    date.setMonth(date.getMonth() - (5 - index));
-    return { year: date.getFullYear(), month: date.getMonth(), label: monthFormatter.format(date).replace(".", "") };
+  const barBuckets = buildChartBuckets(barPeriod, now);
+  const lineBuckets = buildChartBuckets(linePeriod, now);
+  const buildChartData = (buckets: ChartBucket[]) => buckets.map((bucket) => {
+    const expense = expenses.reduce((sum, item) => isInChartRange(item.date, bucket.start, bucket.end) ? sum + (item.amount || 0) : sum, 0);
+    const saving = savings.reduce((sum, item) => isInChartRange(item.createdAt, bucket.start, bucket.end) ? sum + (item.amount || 0) : sum, 0);
+    const budgetForBucket = monthlyBudgetLimit * ((bucket.end.getTime() - bucket.start.getTime()) / (30.44 * 24 * 60 * 60 * 1000));
+    return {
+      month: bucket.label,
+      expense,
+      saving,
+      budgetPercent: budgetForBucket > 0 ? Math.round((expense / budgetForBucket) * 100) : 0,
+    };
   });
-  const barChartData = chartMonths.map(({ year, month, label }) => ({
-    month: label,
-    expense: expenses.reduce((sum, item) => {
-      const date = new Date(item.date);
-      return date.getFullYear() === year && date.getMonth() === month ? sum + (item.amount || 0) : sum;
-    }, 0),
-    saving: savings.reduce((sum, item) => {
-      const date = new Date(item.createdAt || "");
-      return date.getFullYear() === year && date.getMonth() === month ? sum + (item.amount || 0) : sum;
-    }, 0),
-  }));
-
+  const barChartData = buildChartData(barBuckets);
+  const lineChartData = buildChartData(lineBuckets);
   const maxChartValue = Math.max(...barChartData.flatMap((d) => [d.expense, d.saving]), 1);
   const maxBarValue = maxChartValue * 1.15;
-  const lineChartMax = maxChartValue * 1.1;
-  const lineChartPoints = (key: "expense" | "saving") =>
-    barChartData
-      .map((item, index) => `${index * 100 + 20},${190 - (item[key] / lineChartMax) * 160}`)
-      .join(" ");
+  const maxBudgetPercent = Math.max(...lineChartData.map((d) => d.budgetPercent), 100);
+  const lineChartPoints = lineChartData
+    .map((item, index) => `${20 + (index * 500) / Math.max(lineChartData.length - 1, 1)},${190 - (item.budgetPercent / maxBudgetPercent) * 160}`)
+    .join(" ");
 
   // Monthly Budget limit calculation
   const budgetSpentPercent = Math.min(100, Math.round((totalExpense / monthlyBudgetLimit) * 100));
@@ -234,16 +298,9 @@ export default function DashboardView({
 
           {/* User Greeting Text */}
           <div className="min-w-0 flex-1">
-            <div className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.16em] text-sage-deep">
-              <span className="h-1.5 w-1.5 rounded-full bg-sage-deep" />
-              <span>Sanctuary Aktif · Keuangan Terkendali</span>
-            </div>
-            <h1 className="font-display mt-2 text-2xl sm:text-3xl font-extrabold tracking-[-0.045em] text-ink truncate">
-              Halo, {profileName || userName || "Teman Paus"}!
-            </h1>
-            <p className="text-xs sm:text-sm font-semibold text-ink/80 truncate mt-0.5">
-              {profileMotto || "Berikut ringkasan visual, grafik anggaran, dan target tabunganmu hari ini."}
-            </p>
+             <h1 className="font-display text-2xl sm:text-3xl font-extrabold tracking-[-0.045em] text-ink truncate">
+               Halo, {profileName || userName || "Teman Paus"}!
+             </h1>
           </div>
         </div>
 
@@ -257,7 +314,7 @@ export default function DashboardView({
       </div>
 
       {/* ═══ 4 KEY METRIC CARDS (FONTAWESOME ICONS + HIGH CONTRAST) ═══ */}
-      <div className="dashboard-metrics grid grid-cols-2 gap-px overflow-hidden rounded-[1.35rem] sm:grid-cols-4">
+      <div className="dashboard-metrics grid grid-cols-2 gap-px overflow-hidden rounded-[1.5rem] sm:grid-cols-4">
         {/* Metric 1: Total Pengeluaran */}
         <div className="dashboard-metric bg-blush/80 p-4 sm:p-5 transition hover:bg-blush">
           <div className="flex items-center justify-between">
@@ -269,10 +326,7 @@ export default function DashboardView({
           <div className="font-display mt-2 text-xl sm:text-2xl font-extrabold text-[#1f2b18]">
             {formatRp(totalExpense)}
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-ink/85">
-            <span className="text-coral font-black">●</span>
-            <span>Bulan Berjalan</span>
-          </div>
+
         </div>
 
         {/* Metric 2: Total Tabungan */}
@@ -286,10 +340,7 @@ export default function DashboardView({
           <div className="font-display mt-2 text-xl sm:text-2xl font-extrabold text-[#1f2b18]">
             {formatRp(totalSaved)}
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-ink/85">
-            <span className="text-[#3d5a80] font-black">●</span>
-            <span>Wishlist + Jaga-Jaga</span>
-          </div>
+
         </div>
 
         {/* Metric 3: Wishlist Reached */}
@@ -303,9 +354,7 @@ export default function DashboardView({
           <div className="font-display mt-2 text-xl sm:text-2xl font-extrabold text-[#1f2b18]">
             {wishlistPurchased} / {wishlists.length} Item
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-ink/85">
-            <span>Progress: {wishlistPercent}%</span>
-          </div>
+
         </div>
 
         {/* Metric 4: Kebutuhan Pokok */}
@@ -319,82 +368,91 @@ export default function DashboardView({
           <div className="font-display mt-2 text-xl sm:text-2xl font-extrabold text-[#1f2b18]">
             {needsHabis === 0 ? "Semua Ada" : `${needsHabis} Habis`}
           </div>
-          <div className="mt-1 flex items-center gap-1.5 text-[11px] font-bold text-ink/85">
-            <span>{needsTotal - needsHabis} dari {needsTotal} stok aman</span>
-          </div>
+
         </div>
       </div>
 
-      {/* ═══ CHARTS SUITE: DUAL BAR TREND & SVG DONUT CHART ═══ */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+       {/* ═══ CHARTS SUITE: DUAL BAR TREND & SVG DONUT CHART ═══ */}
+       <div className="grid grid-cols-1 gap-6">
         {/* Dual-Bar Comparison Trend Chart (7 cols) */}
-        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-7 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-ink/10 pb-4">
-            <div>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Grafik Batang Komparasi</span>
-              <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
-                Tren Pengeluaran vs Tabungan
-              </h2>
-            </div>
+         <div className="dashboard-panel rounded-[1.5rem] bg-paper p-5 sm:p-7 space-y-4 order-2">
 
-            {/* Legend & Period Switcher */}
-            <div className="flex items-center gap-4 text-xs font-bold">
-              <div className="flex items-center gap-3">
-                <span className="flex items-center gap-1.5 text-ink/90">
-                  <span className="h-3 w-3 rounded-full bg-[#f6c5c1] border border-ink/30" />
-                  Pengeluaran
-                </span>
-                <span className="flex items-center gap-1.5 text-ink/90">
-                  <span className="h-3 w-3 rounded-full bg-[#c2d772] border border-ink/30" />
-                  Tabungan
-                </span>
-              </div>
-            </div>
-          </div>
 
-          {/* Bar Visualization Canvas */}
-          <div className="pt-6 pb-2">
-            <div className="grid grid-cols-6 items-end gap-2 sm:gap-4 h-52 sm:h-60 border-b-2 border-ink/20 px-2 sm:px-4">
-              {barChartData.map((item, idx) => {
-                const expenseHeight = Math.max(8, (item.expense / maxBarValue) * 100);
-                const savingHeight = Math.max(8, (item.saving / maxBarValue) * 100);
+           <div className="flex flex-col gap-3 border-b border-ink/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+             <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
+               Tren Pengeluaran vs Tabungan
+             </h2>
+             <label className="flex items-center gap-2 text-xs font-bold text-ink/70">
+               <span>Periode</span>
+               <select
+                 value={barPeriod}
+                 onChange={(event) => setBarPeriod(event.target.value as ChartPeriod)}
+                 className="rounded-lg border border-ink/15 bg-cream px-2.5 py-1.5 text-xs font-bold text-ink outline-none"
+               >
+                 {chartPeriodOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+               </select>
+             </label>
+           </div>
 
-                return (
-                  <div key={idx} className="flex flex-col items-center h-full justify-end group relative">
-                    {/* Tooltip on hover */}
-                    <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center rounded-xl bg-ink px-2.5 py-1 text-[10px] font-bold text-white shadow-lg pointer-events-none whitespace-nowrap">
-                      <span>Keluar: {formatRp(item.expense)}</span>
-                      <span>Nabung: {formatRp(item.saving)}</span>
-                    </div>
+           {/* Bar Visualization Canvas */}
+           <div className="pt-6 pb-2">
+              <div
+                className="grid items-end gap-2 sm:gap-4 h-52 sm:h-60 border-b-2 border-ink/20 px-2 sm:px-4"
+                style={{ gridTemplateColumns: `repeat(${barChartData.length}, minmax(0, 1fr))` }}
+              >
+               {barChartData.map((item, idx) => {
+                 const expenseHeight = Math.max(8, (item.expense / maxBarValue) * 100);
+                  const savingHeight = Math.max(8, (item.saving / maxBarValue) * 100);
 
-                    <div className="flex items-end gap-1 sm:gap-2 w-full justify-center h-full">
-                      {/* Expense Bar */}
-                      <div
-                        className="w-3 sm:w-5 rounded-t-lg bg-[#f6c5c1] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
-                        style={{ height: `${expenseHeight}%` }}
-                      />
-                      {/* Saving Bar */}
-                      <div
-                        className="w-3 sm:w-5 rounded-t-lg bg-[#c2d772] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
-                        style={{ height: `${savingHeight}%` }}
-                      />
-                    </div>
-                    <span className="mt-2 text-xs font-bold text-ink/85">{item.month}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
+                  return (
+                   <div key={idx} className="flex flex-col items-center h-full justify-end group relative">
+                     {/* Tooltip on hover */}
+                     <div className="absolute -top-12 z-20 hidden group-hover:flex flex-col items-center rounded-xl bg-ink px-2.5 py-1 text-[10px] font-bold text-white shadow-lg pointer-events-none whitespace-nowrap">
+                       <span>Keluar: {formatRp(item.expense)}</span>
+                       <span>Nabung: {formatRp(item.saving)}</span>
+                      </div>
 
-        {/* SVG Interactive Donut Chart (5 cols) */}
-        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 flex flex-col justify-between">
-          <div className="border-b border-ink/10 pb-3">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Grafik Donut Alokasi</span>
-            <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
-              Distribusi Kategori
-            </h2>
-          </div>
+                      <div className="flex items-end gap-1 sm:gap-2 w-full justify-center h-full">
+                       {/* Expense Bar */}
+                       <div
+                         className="w-3 sm:w-5 rounded-t-lg bg-[#f6c5c1] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
+                         style={{ height: `${expenseHeight}%` }}
+                       />
+                       {/* Saving Bar */}
+                       <div
+                         className="w-3 sm:w-5 rounded-t-lg bg-[#c2d772] border border-ink/10 transition-all duration-300 group-hover:brightness-105"
+                         style={{ height: `${savingHeight}%` }}
+                       />
+                     </div>
+                     <span className="mt-2 text-xs font-bold text-ink/85">{item.month}</span>
+                   </div>
+                 );
+               })}
+             </div>
+           </div>
+           <div className="flex flex-wrap justify-end gap-x-4 gap-y-2 border-t border-ink/10 pt-3 text-xs font-semibold text-ink/70">
+             <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-[#f6c5c1] border border-ink/30" />Pengeluaran</span>
+             <span className="flex items-center gap-2"><span className="h-3 w-3 rounded-full bg-[#c2d772] border border-ink/30" />Tabungan</span>
+           </div>
+         </div>
+
+           {/* SVG Interactive Donut Chart (5 cols) */}
+          <div className="dashboard-panel rounded-[1.5rem] bg-paper p-5 sm:p-7 space-y-4 flex flex-col justify-between order-3">
+           <div className="flex flex-col gap-3 border-b border-ink/10 pb-3 sm:flex-row sm:items-center sm:justify-between">
+             <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
+               Distribusi Kategori
+             </h2>
+             <label className="flex items-center gap-2 text-xs font-bold text-ink/70">
+               <span>Periode</span>
+               <select
+                 value={donutPeriod}
+                 onChange={(event) => setDonutPeriod(event.target.value as ChartPeriod)}
+                 className="rounded-lg border border-ink/15 bg-cream px-2.5 py-1.5 text-xs font-bold text-ink outline-none"
+               >
+                 {chartPeriodOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+               </select>
+             </label>
+           </div>
 
           {/* SVG Donut Visual */}
           <div className="relative flex items-center justify-center my-2">
@@ -474,50 +532,57 @@ export default function DashboardView({
             ))}
           </div>
         </div>
-      </div>
-
-      <section className="dashboard-panel bg-paper p-5 sm:p-7" aria-labelledby="cash-flow-title">
-        <div className="flex flex-col gap-3 border-b border-ink/10 pb-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-ink/60">Arus enam bulan</span>
-            <h2 id="cash-flow-title" className="font-display mt-1 text-lg font-bold tracking-[-0.025em] text-ink sm:text-xl">
-              Pengeluaran dan tabungan
+         <section className="dashboard-panel order-1 rounded-[1.5rem] bg-paper p-5 sm:p-7" aria-labelledby="budget-trend-title">
+          <div className="flex flex-col gap-3 border-b border-ink/10 pb-4 sm:flex-row sm:items-center sm:justify-between">
+            <h2 id="budget-trend-title" className="font-display text-lg font-bold tracking-[-0.025em] text-ink sm:text-xl">
+              Persentase budget terpakai
             </h2>
+            <label className="flex items-center gap-2 text-xs font-bold text-ink/70">
+              <span>Periode</span>
+              <select
+                value={linePeriod}
+                onChange={(event) => setLinePeriod(event.target.value as ChartPeriod)}
+                className="rounded-lg border border-ink/15 bg-cream px-2.5 py-1.5 text-xs font-bold text-ink outline-none"
+              >
+                {chartPeriodOptions.map((option) => <option key={option.value} value={option.value}>{option.label}</option>)}
+              </select>
+            </label>
           </div>
-          <div className="flex items-center gap-4 text-xs font-semibold text-ink/70">
-            <span className="flex items-center gap-2"><span className="dashboard-line-key bg-[#c44f45]" />Keluar</span>
-            <span className="flex items-center gap-2"><span className="dashboard-line-key bg-sage-deep" />Nabung</span>
-          </div>
+         <div className="mt-5 overflow-x-auto">
+           <svg
+             viewBox="0 0 620 220"
+             className="h-auto min-w-[540px] w-full"
+             role="img"
+              aria-label={`Persentase budget terpakai untuk ${chartPeriodOptions.find((option) => option.value === linePeriod)?.label}`}
+           >
+             {[30, 70, 110, 150, 190].map((y) => (
+               <line key={y} x1="20" x2="520" y1={y} y2={y} stroke="currentColor" strokeOpacity="0.1" />
+             ))}
+              <polyline points={lineChartPoints} fill="none" stroke="#c44f45" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              {lineChartData.map((item, index) => {
+                const x = 20 + (index * 500) / Math.max(lineChartData.length - 1, 1);
+                const budgetY = 190 - (item.budgetPercent / maxBudgetPercent) * 160;
+               return (
+                 <g key={`${item.month}-${index}`}>
+                   <circle cx={x} cy={budgetY} r="4" fill="#c44f45" stroke="#fffef9" strokeWidth="2" />
+                   <text x={x} y="215" textAnchor="middle" fill="currentColor" fillOpacity="0.65" fontSize="11" fontWeight="700">{item.month}</text>
+                 </g>
+               );
+             })}
+           </svg>
+         </div>
+         <div className="flex justify-end border-t border-ink/10 pt-3 text-xs font-semibold text-ink/70">
+           <span className="flex items-center gap-2"><span className="dashboard-line-key bg-[#c44f45]" />Budget terpakai</span>
+         </div>
+        </section>
         </div>
-        <div className="mt-5 overflow-x-auto">
-          <svg viewBox="0 0 620 220" className="h-auto min-w-[540px] w-full" role="img" aria-label="Grafik garis pengeluaran dan tabungan selama enam bulan">
-            {[30, 70, 110, 150, 190].map((y) => (
-              <line key={y} x1="20" x2="520" y1={y} y2={y} stroke="currentColor" strokeOpacity="0.1" />
-            ))}
-            <polyline points={lineChartPoints("expense")} fill="none" stroke="#c44f45" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            <polyline points={lineChartPoints("saving")} fill="none" stroke="#8a9e42" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-            {barChartData.map((item, index) => {
-              const x = index * 100 + 20;
-              const expenseY = 190 - (item.expense / lineChartMax) * 160;
-              const savingY = 190 - (item.saving / lineChartMax) * 160;
-              return (
-                <g key={item.month}>
-                  <circle cx={x} cy={expenseY} r="4" fill="#c44f45" stroke="#fffef9" strokeWidth="2" />
-                  <circle cx={x} cy={savingY} r="4" fill="#8a9e42" stroke="#fffef9" strokeWidth="2" />
-                  <text x={x} y="215" textAnchor="middle" fill="currentColor" fillOpacity="0.65" fontSize="11" fontWeight="700">{item.month}</text>
-                </g>
-              );
-            })}
-          </svg>
-        </div>
-      </section>
 
       {/* ═══ PROGRESS BARS SUITE & RECENT ACTIVITIES ═══ */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         {/* 4 Multi-Progress Bars (7 cols) */}
-        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-7 space-y-5">
+        <div className="dashboard-panel rounded-[1.5rem] bg-paper p-5 sm:p-7 lg:col-span-7 space-y-5">
           <div className="border-b border-ink/10 pb-3">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Indikator Milestone</span>
+
             <h2 className="font-display text-lg sm:text-xl font-bold text-[#1f2b18]">
               Target & Progress Batas Keuangan
             </h2>
@@ -595,11 +660,11 @@ export default function DashboardView({
         </div>
 
         {/* Recent Transactions & Financial Tip (5 cols) */}
-        <div className="dashboard-panel bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 flex flex-col justify-between">
+        <div className="dashboard-panel rounded-[1.5rem] bg-paper p-5 sm:p-7 lg:col-span-5 space-y-4 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between border-b border-ink/10 pb-3">
               <div>
-                <span className="text-[10px] font-extrabold uppercase tracking-widest text-ink/75">Catatan Kas</span>
+
                 <h2 className="font-display text-lg font-bold text-[#1f2b18]">
                   Transaksi Pengeluaran Terakhir
                 </h2>
