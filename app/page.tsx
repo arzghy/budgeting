@@ -60,10 +60,10 @@ function TypewriterEffectSmooth({ text }: { text: string }) {
 const copy = {
   id: {
     login: "Masuk",
-    hero: "Uang harian, terlihat jelas.",
+    hero: "Uang harian, terlihat jelas dengan",
+    heroAccent: "Mibudge.",
     intro: "Catat pengeluaran, rencanakan kebutuhan, dan lihat ruang anggaranmu dalam satu tempat.",
     start: "Mulai mencatat",
-    explore: "Lihat cara kerja",
 
     how: "Tiga hal yang perlu terlihat.",
     howIntro: "MiBudge menyusun informasi berdasarkan keputusan yang perlu kamu ambil hari ini.",
@@ -81,10 +81,10 @@ const copy = {
   },
   en: {
     login: "Sign in",
-    hero: "See your daily money clearly.",
+    hero: "See your daily money clearly with",
+    heroAccent: "Mibudge.",
     intro: "Track spending, plan essentials, and understand your available budget in one place.",
     start: "Start tracking",
-    explore: "See how it works",
 
     how: "Three things worth seeing.",
     howIntro: "MiBudge organizes information around the decisions you need to make today.",
@@ -173,12 +173,13 @@ export default function Landing() {
 <div ref={heroTopRef} className="absolute top-0 h-px w-px" aria-hidden="true" />
 <section className="relative flex min-h-[100dvh] flex-col overflow-hidden bg-gradient-to-b from-[#f6c5c1] to-[#f6dbe2] px-5 pt-16 sm:px-8">
         <div className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center py-10 text-center">
-          <p className="text-sm font-semibold tracking-wide text-[var(--sage-deep)]">MiBudge / personal budgeting</p>
-          <h1 className="mx-auto mt-5 max-w-4xl font-display text-5xl font-semibold leading-[0.94] tracking-[-0.055em] text-balance text-[var(--ink)] sm:text-7xl lg:text-8xl">{t.hero}</h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-7 text-[var(--ink-soft)] sm:text-lg"><TypewriterEffectSmooth text={t.intro} /></p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:items-center">
-            <Link href="/login" className="btn btn-primary px-6 py-3.5 text-sm">{t.start}</Link>
-            <a href="#cara-kerja" className="btn border border-[var(--ink)]/30 bg-white/60 px-6 py-3.5 text-sm text-[var(--ink)]">{t.explore}</a>
+          <div className="relative isolate flex w-full flex-col items-center">
+            <div aria-hidden="true" className="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[22rem] w-[42rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-[radial-gradient(ellipse_at_50%_50%,rgba(220,38,38,0.5)_0%,rgba(220,38,38,0.2)_50%,rgba(220,38,38,0)_72%)] blur-2xl sm:h-[26rem] sm:w-[56rem] lg:h-[30rem] lg:w-[72rem]" />
+            <h1 className="mx-auto mt-5 max-w-3xl font-display text-4xl font-semibold leading-[1.0] tracking-[-0.05em] text-balance text-[var(--ink)] sm:text-5xl lg:text-6xl">{t.hero} <span className="hero-accent-gradient">{t.heroAccent}</span></h1>
+            <p className="mx-auto mt-6 max-w-2xl text-base font-medium leading-7 text-[#6f3b45] sm:text-lg"><TypewriterEffectSmooth text={t.intro} /></p>
+            <div className="mt-8 flex justify-center">
+              <Link href="/login" className="btn btn-fill px-6 py-3.5 text-sm">{t.start}</Link>
+            </div>
           </div>
                      <aside className="mt-6 aspect-video h-auto w-full translate-y-4 overflow-hidden rounded-[1.75rem] border border-[var(--line)] bg-[var(--paper)] text-left shadow-[0_0_26px_rgba(220,38,38,0.28),0_24px_55px_rgba(74,92,54,0.16)] sm:mt-8 sm:translate-y-6" aria-label="Pratinjau dashboard MiBudge">
             <div className="flex items-center justify-between border-b border-[var(--line)] px-5 py-4 sm:px-7"><div className="flex items-center gap-3"><span className="grid h-8 w-8 place-items-center bg-[var(--sage)] font-display font-semibold">M</span><span className="font-display text-lg font-semibold">MiBudge</span></div><span className="text-sm text-[var(--ink-soft)]">Ringkasan bulan ini</span></div>
