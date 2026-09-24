@@ -5001,7 +5001,7 @@
       "file_type": "code",
       "norm_label": "landing()",
       "source_file": "app/page.tsx",
-      "source_location": "L107"
+      "source_location": "L105"
     },
     {
       "id": "app_page_typewritereffectsmooth",
@@ -5013,7 +5013,7 @@
       "file_type": "code",
       "norm_label": "typewritereffectsmooth()",
       "source_file": "app/page.tsx",
-      "source_location": "L15"
+      "source_location": "L13"
     },
     {
       "id": "app_providers_providers",
@@ -41110,7 +41110,7 @@
       "file_type": "code",
       "norm_label": "copy",
       "source_file": "app/page.tsx",
-      "source_location": "L62"
+      "source_location": "L60"
     },
     {
       "id": "app_page_techstack",
@@ -41121,7 +41121,7 @@
       "file_type": "code",
       "norm_label": "techstack",
       "source_file": "app/page.tsx",
-      "source_location": "L13"
+      "source_location": "L11"
     },
     {
       "id": "app_providers",
@@ -122489,7 +122489,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L107",
+      "source_location": "L105",
       "weight": 1.0
     },
     {
@@ -122500,7 +122500,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L13",
+      "source_location": "L11",
       "weight": 1.0
     },
     {
@@ -122511,7 +122511,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L15",
+      "source_location": "L13",
       "weight": 1.0
     },
     {
@@ -122522,7 +122522,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "app/page.tsx",
-      "source_location": "L62",
+      "source_location": "L60",
       "weight": 1.0
     },
     {
@@ -166199,5 +166199,5 @@
       "source_file": "CLAUDE.md"
     }
   ],
-  "built_at_commit": "ef047c9fef09b47aa7c06f389c1ce4bf64c4530e"
+  "built_at_commit": "175648776a5807ca598602df38b0f3eab51578af"
 }

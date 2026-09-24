@@ -36,6 +36,8 @@ html, body {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
+.landing-page { overflow-x: clip; }
+
 * { box-sizing: border-box; }
 
 [class*="border-2"] { border-width: 1px; }
@@ -142,6 +144,34 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .btn-fill { background-image: linear-gradient(90deg, var(--sage-deep) 50%, var(--sage) 50%); background-size: 200% 100%; background-position: 100% 0; background-repeat: no-repeat; color: var(--ink); transition: background-position 0.4s var(--ease-out), color 0.4s ease, transform 0.18s var(--ease-out); }
 .btn-fill:hover { background-position: 0 0; color: #fff; }
 @media (forced-colors: active) { .hero-accent-gradient { -webkit-text-fill-color: currentColor; color: var(--ink); -webkit-text-stroke: 0; } }
+.budget-route { position: relative; z-index: 1; margin-bottom: 4.5rem; border-radius: 2.5rem 2.5rem 0 0; background: #2f4d3a; isolation: isolate; }
+.budget-route::after { content: ""; position: absolute; z-index: 0; right: 0; bottom: -4.55rem; left: 0; height: 4.6rem; pointer-events: none; background: url("data:image/svg+xml,%3Csvg viewBox='0 0 1920 96' preserveAspectRatio='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%230e6975' d='M0 0h1920v36c-60 23-120 14-240 0-160-19-280 36-440 3-160-33-280-36-435-2-155 34-265 23-415-3C230 7 120 75 0 43V0Z'/%3E%3C/svg%3E") center top / 100% 100% no-repeat; }
+.budget-route-viewport { position: relative; min-height: 22rem; width: 100vw; margin-left: calc(50% - 50vw); overflow: hidden; scrollbar-width: none; transform: translateZ(0); backface-visibility: hidden; }
+.budget-route-viewport::-webkit-scrollbar { display: none; }
+.budget-route-water { position: absolute; inset: 46% 0 0; overflow: hidden; background: #0e6975; }
+.budget-route-water span { position: absolute; left: -10%; width: 120%; height: 5.5rem; border-radius: 48%; background: #155263; animation: water-swell 7s ease-in-out infinite alternate; }
+.budget-route-water span:nth-child(1) { top: -2.8rem; transform: rotate(-2deg); }
+.budget-route-water span:nth-child(2) { top: 2rem; background: #104758; transform: rotate(2deg); animation-delay: -2.5s; }
+.budget-route-water span:nth-child(3) { top: 6.4rem; background: #0c3a4c; transform: rotate(-1deg); animation-delay: -4s; }
+.budget-route-track { position: relative; z-index: 1; display: flex; width: max-content; gap: 3rem; margin: 0; padding: 0 1rem 5rem; list-style: none; will-change: transform; }
+.budget-route-step { width: min(80vw, 18rem); flex: 0 0 auto; }
+.budget-route-card { min-height: 11rem; padding: 1.75rem; border-radius: 1.5rem; background: var(--paper); color: var(--ink); box-shadow: 0 18px 36px rgba(20, 40, 29, 0.22); }
+.budget-route-card p { margin-top: 1.75rem; font-size: 1rem; font-weight: 650; line-height: 1.45; }
+.budget-route-index { color: var(--sage-deep); font-family: var(--font-sans), sans-serif; font-size: 2rem; font-weight: 750; letter-spacing: -0.08em; }
+.budget-route-whale { position: absolute; z-index: 2; bottom: 3.25rem; left: 1rem; width: 10.5rem; color: var(--cream); will-change: transform; }
+.budget-route-whale > div { width: 100%; }
+@keyframes water-swell { to { translate: 5% 0; } }
+@media (min-width: 768px) {
+  .budget-route { margin-bottom: 6rem; border-radius: 4rem 4rem 0 0; }
+  .budget-route::after { bottom: -6.05rem; height: 6.1rem; }
+  .budget-route-viewport { min-height: 24rem; overflow: hidden; }
+  .budget-route-track { gap: 10rem; padding: 0 8rem 5rem; }
+  .budget-route-step { width: min(28vw, 22rem); }
+  .budget-route-step:nth-child(even) { transform: translateY(3.5rem); }
+  .budget-route-card { min-height: 12rem; border-radius: 1.75rem; }
+  .budget-route-card p { margin-top: 2.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .budget-route-water span { animation: none; } }
 .glass { background: rgba(255, 253, 246, 0.55); border: 1px solid rgba(255, 255, 255, 0.55); box-shadow: 0 8px 32px rgba(246, 197, 193, 0.22); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 @keyframes marquee { to { transform: translateX(-25%); } }
 .tech-marquee { animation: marquee 28s linear infinite; }

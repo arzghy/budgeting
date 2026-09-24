@@ -7,6 +7,8 @@ import { useRouter } from "next/navigation";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowsRotate } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useRef, useState } from "react";
+import Lottie from "lottie-react";
+import whaleSwim from "@/public/images/whale-swim.json";
 
 const techStack: [string, string][] = [["Next.js", "/images/nextjs.png"], ["React", "/images/react.png"], ["Tailwind CSS", "/images/tailwind.png"], ["MongoDB", "/images/mongodb.png"], ["Mongoose", "/images/mongoose.png"]];
 
@@ -131,9 +133,10 @@ export default function Landing() {
        if (disposed) return;
        gsap.registerPlugin(ScrollTrigger);
        ctx = gsap.context(() => {
-         gsap.utils.toArray<HTMLElement>("section").forEach((section) => {
+          gsap.utils.toArray<HTMLElement>("section").forEach((section) => {
+           if (section.classList.contains("budget-route")) return;
 
-          const content = section.firstElementChild;
+           const content = section.firstElementChild;
           if (!content) return;
           gsap.from(content, {
             opacity: 0,
@@ -146,17 +149,43 @@ export default function Landing() {
               once: true,
               scrub: false,
             },
-          });
+           });
+         });
+          const route = document.querySelector<HTMLElement>(".budget-route");
+           const routeTrack = route?.querySelector<HTMLElement>(".budget-route-track");
+           const routeWhale = route?.querySelector<HTMLElement>(".budget-route-whale");
+           if (route && routeTrack && routeWhale && window.matchMedia("(min-width: 768px)").matches) {
+             const viewport = routeTrack.parentElement!;
+             const distance = () => Math.max(0, routeTrack.scrollWidth - viewport.clientWidth);
+             const whaleDistance = () => Math.max(0, viewport.clientWidth - routeWhale.offsetWidth - 32);
+             gsap.timeline({
+               defaults: { ease: "none" },
+               scrollTrigger: {
+                 trigger: route,
+                 start: "top top",
+                 end: () => `+=${Math.max(window.innerWidth * 2.2, distance() + window.innerWidth * 0.7)}`,
+                 pin: true,
+                 pinType: "fixed",
+                 anticipatePin: 1,
+                 fastScrollEnd: true,
+                 scrub: 1.4,
+                 invalidateOnRefresh: true,
+               },
+             })
+               .to({}, { duration: 0.2 })
+               .to(routeTrack, { x: () => -distance(), duration: 0.6 }, 0.2)
+               .to(routeWhale, { x: whaleDistance, duration: 0.6 }, 0.2)
+               .to({}, { duration: 0.2 });
+           }
         });
-       });
        refreshFrame = window.requestAnimationFrame(() => ScrollTrigger.refresh());
      });
      return () => { disposed = true; window.cancelAnimationFrame(refreshFrame); ctx?.revert(); };
   }, []);
 
   return (
-    <main id="top" className="min-h-[100dvh] bg-[#f6dbe2] text-[var(--ink)]">
-<header className={`sticky top-0 z-50 transition-all duration-300 ${floatingNav ? "px-4 pt-3 sm:px-8" : "border-b border-[var(--line)] bg-white"}`}>
+    <main id="top" className="landing-page min-h-[100dvh] bg-[#f6dbe2] text-[var(--ink)]">
+<header className={`sticky top-0 z-[100] transition-all duration-300 ${floatingNav ? "px-4 pt-3 sm:px-8" : "border-b border-[var(--line)] bg-white"}`}>
         <div className={floatingNav ? "mx-auto max-w-7xl rounded-2xl border border-[var(--line)] bg-white/95 shadow-[0_12px_35px_rgba(32,48,34,0.14)] backdrop-blur-xl" : ""}>
         <nav className="mx-auto flex h-[4.5rem] max-w-7xl items-center justify-between px-5 sm:px-8" aria-label="Navigasi utama">
           <Link href="/" className="flex items-center gap-2 font-display text-xl font-semibold tracking-tight text-[var(--ink)]"><Image src="/images/logo-mibudge.png" alt="" width={56} height={56} className="h-14 w-14 object-contain" priority />MiBudge</Link>
@@ -193,11 +222,33 @@ export default function Landing() {
       </section>
 
 
-                                   <section className="relative z-20 mt-16 min-h-[calc(100dvh-4.5rem)] overflow-hidden rounded-[2.5rem] bg-[#173b2d] px-5 py-20 text-[var(--bg)] shadow-[0_-18px_45px_rgba(32,48,34,0.18)] sm:mt-24 sm:rounded-[4rem] sm:px-8 lg:py-28">
-         <div className="mx-auto max-w-7xl"><p className="text-sm text-white/60">MiBudge / langkah berikutnya</p><h2 className="mt-3 max-w-2xl font-display text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">{t.flow}</h2><p className="mt-5 max-w-lg leading-7 text-white/70">{t.flowIntro}</p><div className="mt-12 overflow-hidden"><div className="grid gap-3 md:flex md:w-max md:gap-5">{t.steps.concat([t.close]).map((step, index) => <article key={step} className="min-h-36 border border-white/15 bg-white/5 p-5 md:w-[18rem] md:shrink-0"><span className="font-mono text-xs text-[var(--sage)]">0{index + 1}</span><p className="mt-10 text-sm font-semibold">{step}</p></article>)}</div></div><Link href="/login" className="mt-9 inline-flex bg-[var(--sage)] px-5 py-3 text-sm font-semibold text-[var(--ink)] transition-transform hover:-translate-y-0.5 active:translate-y-0">{t.start}</Link></div>
+       <section className="budget-route relative z-20 mt-16 px-5 pb-0 pt-20 text-[var(--bg)] sm:mt-24 sm:px-8 lg:pt-28" aria-labelledby="flow-heading">
+         <div className="relative mx-auto max-w-7xl">
+           <header className="max-w-xl">
+             <p className="text-sm font-medium text-[var(--cream)]/75">MiBudge / langkah berikutnya</p>
+             <h2 id="flow-heading" className="mt-3 font-display text-4xl font-semibold leading-tight tracking-tight sm:text-6xl">{t.flow}</h2>
+             <p className="mt-5 leading-7 text-white/75">{t.flowIntro}</p>
+            </header>
+             <div className="budget-route-viewport mt-12">
+              <div className="budget-route-water" aria-hidden="true"><span /><span /><span /></div>
+              <div className="budget-route-whale" aria-hidden="true">
+                <Lottie animationData={whaleSwim} loop />
+              </div>
+              <ol className="budget-route-track">
+                {t.steps.concat([t.close]).map((step, index) => (
+                  <li key={step} className="budget-route-step">
+                    <article className="budget-route-card">
+                      <span className="budget-route-index">0{index + 1}</span>
+                      <p>{step}</p>
+                    </article>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
        </section>
 
-        <section className="relative z-30 -mt-10 overflow-hidden border-0 bg-[#f6dbe2] py-16 shadow-none sm:-mt-16" aria-label="Teknologi yang digunakan">
+         <section className="relative overflow-hidden border-0 bg-[#f6dbe2] pb-8 pt-4 shadow-none sm:py-6" aria-label="Teknologi yang digunakan">
           <div className="mx-auto max-w-7xl px-5 sm:px-8"><p className="font-display text-3xl font-semibold tracking-tight">Dibuat dengan teknologi</p></div>
           <div className="mt-8 overflow-hidden px-2"><div className="tech-marquee flex w-max items-center gap-20 px-8 py-6">{techStack.concat(techStack, techStack, techStack).map(([name, src], index) => <div key={`${name as string}-${index}`} className="tech-logo group flex min-w-48 flex-col items-center gap-3 rounded-2xl px-8 pt-12 pb-4 text-sm font-semibold text-[var(--ink)]"><span className="grid h-16 w-16 place-items-center drop-shadow-[0_0_38px_rgba(220,38,38,0.9)] transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-[1.12] group-hover:drop-shadow-[0_0_64px_rgba(220,38,38,1)]">{src ? <Image src={src as string} alt={`${name} logo`} width={64} height={64} className="h-16 w-16 object-contain" /> : <FontAwesomeIcon icon={faArrowsRotate} className="text-4xl text-[var(--sage-deep)]" />}</span><span>{name as string}</span></div>)}</div></div>
         </section>

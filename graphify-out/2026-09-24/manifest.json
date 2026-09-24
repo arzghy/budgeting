@@ -132,9 +132,9 @@
     "semantic_hash": ""
   },
   "app/page.tsx": {
-    "mtime": 1790266226.6128645,
-    "seen": 1790266283.6180043,
-    "ast_hash": "b0701b136407a1259890b0548d257bd5",
+    "mtime": 1790251665.5498278,
+    "seen": 1790251703.4182112,
+    "ast_hash": "ff934071fbdb12abad971ed9ce41b5db",
     "semantic_hash": ""
   },
   "app/providers.tsx": {
@@ -1617,12 +1617,6 @@
     "mtime": 1790247499.3957646,
     "seen": 1790249087.4465234,
     "ast_hash": "91259811568ee03eaac3b12cd18194bf",
-    "semantic_hash": ""
-  },
-  "public/images/whale-swim.json": {
-    "mtime": 1790253524.4608595,
-    "seen": 1790253752.2740102,
-    "ast_hash": "53794f664e338eeedd97637bd94e3818",
     "semantic_hash": ""
   }
 }
